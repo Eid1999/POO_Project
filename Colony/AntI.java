@@ -1,5 +1,5 @@
 package Colony;
 
-public class Colony {
+public interface AntI {
     
 }
