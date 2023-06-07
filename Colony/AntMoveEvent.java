@@ -9,7 +9,6 @@ class AntMoveEvent extends Events {
 
     public AntMoveEvent(int ant, double currentTime,float delta) {
         //Edge edge=ant.optimization();
-        //moveTime=exponentialDistribution(edge.getWeight()*delta);
         this.ant = ant;
 
         selfTime=exponentialDistribution(delta)+currentTime;
