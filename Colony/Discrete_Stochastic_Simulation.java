@@ -2,7 +2,7 @@ package Colony;
 import java.util.*;
 import java.io.*;
 public class Discrete_Stochastic_Simulation  {
-    protected HashMap<String, Integer> Parameters = new HashMap<String, Integer>();
+    protected HashMap<String, Float> Parameters = new HashMap<String, Float>();
     private String[] Parameters_Name ={"n","n1","a","alpha","beta","delta","eta","p","y","v","t"}; //Parameters
     protected ArrayList<Integer[]> Map=new ArrayList<Integer[]>();//Graph from file
     protected WeightedGraph graph;
@@ -59,7 +59,7 @@ public class Discrete_Stochastic_Simulation  {
         else if (args[0].equals("-r")){
             System.out.println("Saving Parameters");
             Read_parameters(Arrays.copyOfRange(args, 1, args.length));
-            this.graph = new WeightedGraph(this.Parameters.get("n"), this.Parameters.get("a"));
+            this.graph = new WeightedGraph(Math.round( this.Parameters.get("n")), Math.round(this.Parameters.get("a")));
             this.graph.createGraphWithHamiltonianCircuit();
             
         }
@@ -77,14 +77,14 @@ public class Discrete_Stochastic_Simulation  {
     }
 
     public void Read_parameters(String[] arg){
-        int aux;
+        float aux;
         if (arg.length!=this.Parameters_Name.length){
                 System.out.println("Wrong number of Parameters\nExiting Program");
                 System.exit(0);
             }
         for (int i = 0; i < arg.length; i++){
                 try {
-                    aux = Integer.parseInt(arg[i]);
+                    aux = Float.parseFloat(arg[i]);
                 }
                 catch (NumberFormatException e) {
                     aux = 0;
@@ -97,43 +97,62 @@ public class Discrete_Stochastic_Simulation  {
 
     }
     public void Simulation(){
-        PriorityQueue<AntMoveEvent> antMoveEvents = new PriorityQueue<>();
-        PriorityQueue<PheronomeEVEvent> PheronomeEVEvents = new PriorityQueue<>();
+        PriorityQueue<Events> events = new PriorityQueue<>();
         double currentTime=0;
         //PriorityQueue<> Pheno = new PriorityQueue<>();
-        for (AntI ant : colony.getAnts()) {
-            antMoveEvents.add(new AntMoveEvent(ant, currentTime + ant.exponentialDistribution(Parameters)));
-        }
-
-        while (currentTime< this.Parameters.get("t")) {
-            double AntTime= antMoveEvents.peek().getMoveTime();
-        
-            //double Pheromonetime=PheronomeEVEvents.peek().getMoveTime();
-            AntMoveEvent antEvent=antMoveEvents.poll();
-            if (currentTime>antEvent.getMoveTime()){
-                currentTime=antEvent.getMoveTime();
-                AntI ant=antEvent.getAnt();
-                antMoveEvents.add(new AntMoveEvent(ant, currentTime + ant.exponentialDistribution(Parameters)));
-            }
-
-            // if (AntTime>Pheromonetime){
-            //     AntMoveEvent antEvent=PheronomeEVEvents.poll();
-
-            // }else{
-
-            // }
-
+        //for (AntI ant : colony.getAnts()) {
+        for (int index = 0; index < Math.round(Parameters.get("v")); index++) {
             
+            events.add(new AntMoveEvent(index, currentTime,Parameters.get("delta")));
+        }
+        double obs_message_time=this.Parameters.get("t")/20;
+        int num_moves=0;
+        int num_evaporations=0;
+        while (currentTime< this.Parameters.get("t")) {
+            Events Event=events.poll();
+            if (this.Parameters.get("t")>Event.getTime()){
+                
+                currentTime=Event.getTime();
+                if (Event instanceof AntMoveEvent) {
+                    AntMoveEvent event = (AntMoveEvent) Event;
+                    int ant=event.get();
+                    //ant.move();
+                    num_moves+=1;
+                    events.add(new AntMoveEvent(ant, currentTime, Parameters.get("delta")));
+                }
+                else{
+                    PheronomeEVEvent event = (PheronomeEVEvent) Event;
+                    Edge edge=event.get();
+                    num_evaporations+=1;
+                    events.add(new PheronomeEVEvent(edge, currentTime, Parameters.get("n")));
+                }
+            }
+            else{
+                break;
+            }
+                
+            if(currentTime>=obs_message_time){
+                obs_message_time+=this.Parameters.get("t")/20;
+                System.out.println("\n\nObservation numbers:");
+                System.out.println("\tPresent instant:"+currentTime);
+                System.out.println("\tNumber of move events:"+num_moves);
+                System.out.println("\tNumber of evaporations:"+num_evaporations);
+                System.out.println("\tTop candidate cycles:");
+                System.out.println("\tBest Hamiltonian cycle:\n\n");
+
+
+            }
+    
             
             
         }
     }
     
     public void Print_Parameters_Graph(){
-        System.out.println("Input Parameters");
-        this.Parameters.forEach((key, value) -> System.out.println(key + ":" + value));
-        System.out.println("With Graph");
-        this.graph.printGraph();
+        System.out.println("\nInput Parameters:");
+        this.Parameters.forEach((key, value) -> System.out.println("\t" +key + ":" + value));
+        System.out.println("\nWith Graph:\n");
+        graph.printAdjMatrix();
         
 
     }

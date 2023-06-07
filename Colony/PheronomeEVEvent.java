@@ -1,24 +1,19 @@
 package Colony;
 
-class PheronomeEVEvent implements Comparable<PheronomeEVEvent> {
+class PheronomeEVEvent extends Events  {
     private Edge edge;
-    private double EvaporationTime;
+    private double selfTime;
+    String type="Evaporation";
 
-    public PheronomeEVEvent(Edge edge, double  EvaporationTime) {
+    public PheronomeEVEvent(Edge edge, double  currentTime,float delta) {
         this.edge = edge;
-        this.EvaporationTime = EvaporationTime;
+        this.selfTime = currentTime+exponentialDistribution(delta);
+        super.UpdateTime(selfTime);
     }
-
-    public Edge getEdge() {
+    public Edge get() {
         return edge;
     }
 
-    public double getMoveTime() {
-        return EvaporationTime;
-    }
+    
 
-    @Override
-    public int compareTo(PheronomeEVEvent other) {
-        return Double.compare(this.EvaporationTime, other.EvaporationTime);
-    }
 }
