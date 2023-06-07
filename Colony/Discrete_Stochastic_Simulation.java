@@ -121,10 +121,10 @@ public class Discrete_Stochastic_Simulation  {
                     events.add(new AntMoveEvent(ant, currentTime, Parameters.get("delta")));
                 }
                 else{
-                    PheronomeEVEvent event = (PheronomeEVEvent) Event;
+                    PheromoneEVEvent event = (PheromoneEVEvent) Event;
                     Edge edge=event.get();
                     num_evaporations+=1;
-                    events.add(new PheronomeEVEvent(edge, currentTime, Parameters.get("n")));
+                    events.add(new PheromoneEVEvent(edge, currentTime, Parameters.get("n")));
                 }
             }
             else{
