@@ -3,9 +3,9 @@ import java.util.*;
 import java.io.*;
 public class Discrete_Stochastic_Simulation  {
     protected HashMap<String, Integer> Parameters = new HashMap<String, Integer>();
-    private String[] Parameters_Name ={"n","a","n1","alpha","beta","delta","eta","p","y","v","t"}; //Parameters
+    private String[] Parameters_Name ={"n","n1","a","alpha","beta","delta","eta","p","y","v","t"}; //Parameters
     protected ArrayList<Integer[]> Map=new ArrayList<Integer[]>();//Graph from file
-    protected GraphI graph;
+    protected WeightedGraph graph;
     protected ColonyI  colony;
 
 
@@ -59,12 +59,18 @@ public class Discrete_Stochastic_Simulation  {
         else if (args[0].equals("-r")){
             System.out.println("Saving Parameters");
             Read_parameters(Arrays.copyOfRange(args, 1, args.length));
+            this.graph = new WeightedGraph(this.Parameters.get("n"), this.Parameters.get("a"));
+            this.graph.createGraphWithHamiltonianCircuit();
             
         }
         else{
             System.out.println("Invalid arguments given\nExiting Program");
             System.exit(0);
         }
+        
+//         graph.createGraphWithHamiltonianCircuit();
+//         graph.printGraph();
+        Print_Parameters_Graph();
 
 
         
@@ -88,30 +94,47 @@ public class Discrete_Stochastic_Simulation  {
         }
         //this.colony=new ColonyI(this.Parameters,this.Map);
         //this.graph=new GraphI(this.Parameters, this.Map);
-        this.Print_Parameters_Graph();
+
     }
     public void Simulation(){
-        PriorityQueue<AntI> antMoveEvents = new PriorityQueue<>();
-        PriorityQueue<GraphI> Pheno = new PriorityQueue<>();
+        PriorityQueue<AntMoveEvent> antMoveEvents = new PriorityQueue<>();
+        PriorityQueue<PheronomeEVEvent> PheronomeEVEvents = new PriorityQueue<>();
+        double currentTime=0;
+        //PriorityQueue<> Pheno = new PriorityQueue<>();
+        for (AntI ant : colony.getAnts()) {
+            antMoveEvents.add(new AntMoveEvent(ant, currentTime + ant.exponentialDistribution(Parameters)));
+        }
 
-        int t=0;
-        while (t< this.Parameters.get("t")) {
+        while (currentTime< this.Parameters.get("t")) {
+            double AntTime= antMoveEvents.peek().getMoveTime();
+        
+            //double Pheromonetime=PheronomeEVEvents.peek().getMoveTime();
+            AntMoveEvent antEvent=antMoveEvents.poll();
+            if (currentTime>antEvent.getMoveTime()){
+                currentTime=antEvent.getMoveTime();
+                AntI ant=antEvent.getAnt();
+                antMoveEvents.add(new AntMoveEvent(ant, currentTime + ant.exponentialDistribution(Parameters)));
+            }
+
+            // if (AntTime>Pheromonetime){
+            //     AntMoveEvent antEvent=PheronomeEVEvents.poll();
+
+            // }else{
+
+            // }
+
+            
             
             
         }
     }
     
     public void Print_Parameters_Graph(){
-        this.Map=graph.Return_Graph();
         System.out.println("Input Parameters");
         this.Parameters.forEach((key, value) -> System.out.println(key + ":" + value));
         System.out.println("With Graph");
-        for (Integer[] arr : this.Map) {
-            for (Integer num : arr) {
-                System.out.print(num + " ");
-            }
-            System.out.println("With Graph");
-        }
+        this.graph.printGraph();
+        
 
     }
 
