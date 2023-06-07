@@ -31,4 +31,9 @@ public class Edge implements EdgeInterface<String> {
     public void setPheromone(double pheromone){
         this.pheromone = pheromone;
     }
+    @Override
+    public String toString() {
+        return source + " -> " + destination + " (Weight: " + weight + ", Pheromone: " + pheromone + ")";
+    }
+
 }
