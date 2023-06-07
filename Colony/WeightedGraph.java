@@ -56,15 +56,23 @@ public class WeightedGraph implements Graph<String, Edge> {
     }
 
     public List<String> getNeighbors(String vertex) {
-        List<Edge> edges = adjacencyMap.get(vertex);
-        if (edges != null) {
-            List<String> neighbors = new ArrayList<>();
-            for (Edge edge : edges) {
+        List<Edge> ownEdges = adjacencyMap.get(vertex);
+        List<String> neighbors = new ArrayList<>();
+        if (ownEdges != null) {
+            for (Edge edge : ownEdges) {
                 neighbors.add(edge.getDestination());
             }
-            return neighbors;
         }
-        return new ArrayList<>();
+        for (Map.Entry<String, List<Edge>> entry : adjacencyMap.entrySet()) {
+            List<Edge> edges = entry.getValue();
+            for (Edge edge : edges) {
+                if (edge.getDestination().equals(vertex)) {
+                    neighbors.add(entry.getKey());
+                    break; // No need to continue searching in the current vertex's edges
+                }
+            }
+        }
+        return neighbors;
     }
 
     public List<Edge> getEdges() {
@@ -96,16 +104,13 @@ public class WeightedGraph implements Graph<String, Edge> {
             this.addEdge(startVertex, endVertex, getRandomWeight(maxWeight));
         }
 
-        this.printGraph();
-
         // Add additional random edges to each vertex
         for (String vertex : this.getVertices()) {
-            int numEdges = random.nextInt(numVertices); // Generate a random number of edges (1 to numVertices)
-    
+            int numEdges = random.nextInt(numVertices - 1); // Generate a random number of edges (1 to numVertices)
             while (this.getNeighbors(vertex).size() < numEdges) {
                 String targetVertex = vertices.get(random.nextInt(numVertices));
-    
-                if (!vertex.equals(targetVertex) && !this.hasEdge(vertex, targetVertex) && !this.hasEdge(targetVertex, vertex)) {
+                if (!vertex.equals(targetVertex) && !this.hasEdge(vertex, targetVertex)
+                        && !this.hasEdge(targetVertex, vertex)) {
                     this.addEdge(vertex, targetVertex, getRandomWeight(maxWeight));
                 }
             }
@@ -125,7 +130,7 @@ public class WeightedGraph implements Graph<String, Edge> {
         for (String vertex : this.getVertices()) {
             System.out.println(vertex);
         }
-    
+
         System.out.println("Edges:");
         for (Edge edge : this.getEdges()) {
             String sourceVertex = edge.getSource();
@@ -134,5 +139,40 @@ public class WeightedGraph implements Graph<String, Edge> {
             System.out.println(sourceVertex + " -> " + targetVertex + " (Weight: " + weight + ")");
         }
     }
-    
+
+    public void printAdjMatrix() {
+        List<String> vertices = getVertices();
+        int numVertices = vertices.size();
+
+        // Create a 2D matrix to represent the adjacency matrix
+        double[][] adjMatrix = new double[numVertices][numVertices];
+
+        // Initialize the matrix with zeros
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                adjMatrix[i][j] = 0.0;
+            }
+        }
+
+        // Fill the matrix with edge weights
+        for (String vertex : vertices) {
+            int sourceIndex = vertices.indexOf(vertex);
+            List<Edge> edges = adjacencyMap.get(vertex);
+            if (edges != null) {
+                for (Edge edge : edges) {
+                    int destIndex = vertices.indexOf(edge.getDestination());
+                    adjMatrix[sourceIndex][destIndex] = edge.getWeight();
+                }
+            }
+        }
+        System.out.println();
+        // Print matrix rows
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                System.out.print(adjMatrix[i][j] + "\t");
+            }
+            System.out.println();
+        }
+    }
+
 }

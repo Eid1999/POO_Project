@@ -13,5 +13,6 @@ public interface Graph<V, E> {
     List<V> getNeighbors(V vertex);
     List<E> getEdges();
     void printGraph();
+    void printAdjMatrix();
 }
 

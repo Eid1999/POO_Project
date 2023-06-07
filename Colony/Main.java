@@ -20,6 +20,10 @@ public class Main {
         WeightedGraph graph = new WeightedGraph(5, 10);
         graph.createGraphWithHamiltonianCircuit();
         graph.printGraph();
+<<<<<<< Updated upstream
+=======
+        graph.printAdjMatrix();
+>>>>>>> Stashed changes
     }
     
 }
