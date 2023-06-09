@@ -16,8 +16,8 @@ abstract class Events implements Comparable<Events> {
 
     public void UpdateTime(double SubTime){
         selfTime=SubTime;
-
     }
+    
     @Override
     public int compareTo(Events other) {
         return Double.compare(this.getTime(), other.getTime());
