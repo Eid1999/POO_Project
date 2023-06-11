@@ -14,7 +14,7 @@ public class Discrete_Stochastic_Simulation {
             System.out.println("No arguments given\nExiting Program");
             System.exit(0);
         } else if (args[0].equals("-f")) {
-            System.out.println("Reading File"+args[0]);
+            System.out.println("Reading File");
             
 
             // Reading File object
@@ -24,14 +24,18 @@ public class Discrete_Stochastic_Simulation {
                 BufferedReader br = new BufferedReader(new FileReader(args[1]));
                 String lines;
                 String[] line;
+                String[] line_copy = new String[11];
 
                 while ((lines = br.readLine()) != null) {
                     line = lines.split(" ");
-
                     if (i == 0) {
-                        this.Read_parameters(line);
+                        line_copy [0] = line[0];
+                        line_copy [1] = "0";
+                        System.arraycopy(line, 1, line_copy, 2, 9);
+                        System.out.println(line_copy);
+                        this.Read_parameters(line_copy);
                         this.graph = new WeightedGraph(Math.round(this.Parameters.get("n")),
-                                0, "v"+this.Parameters.get("n1"));
+                                0, "v"+line_copy[2]);
                     } else {
                         if (line.length != this.Parameters.get("n")) {
                             System.out.println("Wrong Numbers Nodes\nExiting Program");
@@ -41,7 +45,7 @@ public class Discrete_Stochastic_Simulation {
                         for (int j = 0; j < line.length; j++) {
                             double weight = Double.parseDouble(line[j]);
                             if (weight != 0) {
-                                String source = "v"+Integer.toString(i+1);
+                                String source = "v"+Integer.toString(i);
                                 String destination = "v"+Integer.toString(j + 1);
                                 graph.addEdge(source, destination, weight);
                             }
