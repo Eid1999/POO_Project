@@ -1,7 +1,7 @@
 package Colony;
 
 import java.util.*;
-import java.io.*;
+
 
 public class WeightedGraph implements Graph<String, Edge> {
     private Map<String, List<Edge>> adjacencyMap;
@@ -9,9 +9,9 @@ public class WeightedGraph implements Graph<String, Edge> {
     private double maxWeight;
     private String nestNode;
 
-    public WeightedGraph(int numVertices, double maxWeight) {
+    public WeightedGraph(int numVertices, double maxWeight, String n1) {
         adjacencyMap = new HashMap<>();
-
+        this.nestNode= n1;
         this.numVertices = numVertices;
         this.maxWeight = maxWeight;
     }
@@ -29,7 +29,6 @@ public class WeightedGraph implements Graph<String, Edge> {
     
     public void addVertex(String vertex) {
         adjacencyMap.put(vertex, new ArrayList<>());
-        this.numVertices++;
     }
 
     public void addEdge(String source, String destination, double weight) {
@@ -105,43 +104,6 @@ public class WeightedGraph implements Graph<String, Edge> {
         return allEdges;
     }
 
-    // public void loadFromFile(String filePath) {
-    //     try {
-    //         BufferedReader br = new BufferedReader(new FileReader(filePath));
-    //         String line;
-    //         int i = 0;
-    
-    //         while ((line = br.readLine()) != null) {
-    //             String[] line_elems = line.split(" ");
-    
-    //             if (i == 0) {
-    //                 int numVertices = Integer.parseInt(line_elems[0]);
-    //                 double maxWeight = Double.parseDouble(line_elems[1]);
-    //                 this.numVertices = numVertices;
-    //                 this.maxWeight = maxWeight;
-    //             } else {
-    //                 if (line_elems.length != this.numVertices) {
-    //                     System.out.println("Wrong Number of Nodes\nExiting Program");
-    //                     System.exit(0);
-    //                 }
-    //                 for (int j = 0; j < line_elems.length; j++) {
-    //                     double weight = Double.parseDouble(line_elems[j]);
-    //                     if (weight != 0) {
-    //                         String source = Integer.toString(i);
-    //                         String destination = Integer.toString(j + 1);
-    //                         addEdge(source, destination, weight);
-    //                     }
-    //                 }
-    //             }
-    //             i++;
-    //         }
-    //         br.close();
-    //     } catch (IOException e) {
-    //         System.out.println("Error Reading File\nExiting Program");
-    //         System.exit(0);
-    //     }
-    // }
-
     public WeightedGraph createGraphWithHamiltonianCircuit() {
         Random random = new Random();
         String startVertex, endVertex;
@@ -153,15 +115,18 @@ public class WeightedGraph implements Graph<String, Edge> {
 
         // Create a list of vertices in random order
         List<String> vertices = new ArrayList<>(this.getVertices());
+        vertices.remove(this.nestNode);
         Collections.shuffle(vertices);
+        vertices.add(0, this.nestNode);
         // Connect the vertices in a circular manner to guarantee a Hamiltonian circuit
         for (int i = 0; i < numVertices; i++) {
 
             startVertex = vertices.get(i);
+            System.out.println(startVertex);
             endVertex = vertices.get((i + 1) % numVertices);
             this.addEdge(startVertex, endVertex, getRandomWeight(maxWeight));
         }
-
+        
         // Add additional random edges to each vertex
         for (String vertex : this.getVertices()) {
             int numEdges = random.nextInt(numVertices - 1); // Generate a random number of edges (1 to numVertices)

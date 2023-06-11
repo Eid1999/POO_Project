@@ -5,7 +5,7 @@ import java.io.*;
 
 public class Discrete_Stochastic_Simulation {
     protected HashMap<String, Float> Parameters = new HashMap<String, Float>();
-    private String[] Parameters_Name = { "n", "n1", "a", "alpha", "beta", "delta", "eta", "p", "y", "v", "t" }; // Parameters
+    private String[] Parameters_Name = { "n", "a", "n1", "alpha", "beta", "delta", "eta", "p", "y", "v", "t" }; // Parameters
     protected WeightedGraph graph;
     protected ColonyI colony;
 
@@ -31,7 +31,7 @@ public class Discrete_Stochastic_Simulation {
                     if (i == 0) {
                         this.Read_parameters(line);
                         this.graph = new WeightedGraph(Math.round(this.Parameters.get("n")),
-                                Math.round(this.Parameters.get("a")));
+                                0, "v"+this.Parameters.get("n1"));
                     } else {
                         if (line.length != this.Parameters.get("n")) {
                             System.out.println("Wrong Numbers Nodes\nExiting Program");
@@ -58,7 +58,7 @@ public class Discrete_Stochastic_Simulation {
         } else if (args[0].equals("-r")) {
             System.out.println("Saving Parameters");
             Read_parameters(Arrays.copyOfRange(args, 1, args.length));
-            this.graph = new WeightedGraph(Math.round(this.Parameters.get("n")), Math.round(this.Parameters.get("a")));
+            this.graph = new WeightedGraph(Math.round(this.Parameters.get("n")), Math.round(this.Parameters.get("a")), "v"+args[3]);
             this.graph.createGraphWithHamiltonianCircuit();
             this.graph.setNestNode("v" + this.Parameters.get("n1"));
 

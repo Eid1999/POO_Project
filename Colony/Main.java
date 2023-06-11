@@ -4,21 +4,19 @@ import java.util.*;
 
 
 
-import java.io.*;
-
-
 public class Main {
     static Discrete_Stochastic_Simulation DSS;
     
     public static void main(String[] args) {
-        DSS=new Discrete_Stochastic_Simulation(args);
+        String[] args_main = {"-r", "7", "10", "1", "4", "5", "6", "7", "8", "9", "10", "11"};
+        DSS=new Discrete_Stochastic_Simulation(args_main);
         DSS.Simulation();
     }
 }
 // public class Main {
 //     public static void main(String[] args) {
         
-//         WeightedGraph graph = new WeightedGraph(4, 10);
+//         WeightedGraph graph = new WeightedGraph(4, 10, "v1");
 //         graph.createGraphWithHamiltonianCircuit();
 //         graph.printGraph();
 //         graph.printAdjMatrix();
