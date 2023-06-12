@@ -48,16 +48,30 @@ public class Ant implements AntI {
 	}
 	
 	// rework
-	public void Move(Edge edge) {
-//		if ((edge.getDestination()).equals(path.get(path.size()-1))) {
-//			this.path.add(edge.getSource());
-//		}
-//		if ((edge.getSource()).equals(path.get(path.size()-1))) {
-			this.path.add(edge.getDestination());
-//		}
+	public ArrayList<String> Move(Edge edge) {
+		String aux;
+		ArrayList<String> hamilton = new ArrayList<String>();
+		if (edge.equals(null)) {
+			aux = this.getPosition();
+			hamilton = this.getPath();
+			this.path.clear();
+			this.path.add(aux);
+			return hamilton;
+		}
+		else {
+			// comment out ifs
+			if ((edge.getDestination()).equals(path.get(path.size()-1))) {
+				this.path.add(edge.getSource());
+			}
+			if ((edge.getSource()).equals(path.get(path.size()-1))) {
+				this.path.add(edge.getDestination());
+			}
+			return null;
+		}
+
 	}
 	
-	// replace in AntMoveEvent ???
+	//
 	public Edge Optimization(WeightedGraph graph, float alpha, float beta, float delta) {
 		Edge nextedge = null;
 		double p = 0.00;
@@ -70,10 +84,11 @@ public class Ant implements AntI {
 		unvis = this.getUnvisited(adj);
 		if (unvis.isEmpty()) {
 			if (this.getPosition().equals(this.path.get(0))) {
-				String aux = this.path.get(0);
-				this.path.clear(); // removeAll ?
-				nextedge = graph.getEdge(this.getPosition(), aux);
-				// HERE: trigger pheromone release, need path before
+				// String aux = this.path.get(0);
+				// this.path.clear(); // removeAll ?
+				// nextedge = graph.getEdge(this.getPosition(), aux);
+				nextedge = null;
+				// HERE: trigger pheromone release, need to keep path!!!
 				return nextedge;
 			}
 			else {
