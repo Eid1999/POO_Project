@@ -2,12 +2,13 @@ package Colony;
 
 import java.util.*;
 import java.io.*;
+import java.lang.*;
 
 public class Discrete_Stochastic_Simulation {
     protected HashMap<String, Float> Parameters = new HashMap<String, Float>();
-    private String[] Parameters_Name = { "n", "a", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" }; // Parameters
-
-    
+    private String[] Parameters_Name = { "n", "a", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" };
+    private ArrayList<ArrayList<String>> top_Candidates;// Parameters
+    PriorityQueue<Halmiton_cicles> nodes_Queue = new PriorityQueue<Halmiton_cicles>();
     protected WeightedGraph graph;
     protected Colony colony;
 
@@ -17,7 +18,6 @@ public class Discrete_Stochastic_Simulation {
             System.exit(0);
         } else if (args[0].equals("-f")) {
             System.out.println("Reading File");
-            
 
             // Reading File object
             int i = 0;
@@ -31,13 +31,13 @@ public class Discrete_Stochastic_Simulation {
                 while ((lines = br.readLine()) != null) {
                     line = lines.split(" ");
                     if (i == 0) {
-                        line_copy [0] = line[0];
-                        line_copy [1] = "0";
+                        line_copy[0] = line[0];
+                        line_copy[1] = "0";
                         System.arraycopy(line, 1, line_copy, 2, 9);
                         System.out.println(line_copy);
                         this.Read_parameters(line_copy);
                         this.graph = new WeightedGraph(Math.round(this.Parameters.get("n")),
-                                0, "v"+line_copy[2]);
+                                0, "v" + line_copy[2]);
                     } else {
                         if (line.length != this.Parameters.get("n")) {
                             System.out.println("Wrong Numbers Nodes\nExiting Program");
@@ -47,8 +47,8 @@ public class Discrete_Stochastic_Simulation {
                         for (int j = 0; j < line.length; j++) {
                             double weight = Double.parseDouble(line[j]);
                             if (weight != 0) {
-                                String source = "v"+Integer.toString(i);
-                                String destination = "v"+Integer.toString(j + 1);
+                                String source = "v" + Integer.toString(i);
+                                String destination = "v" + Integer.toString(j + 1);
                                 graph.addEdge(source, destination, weight);
                             }
                         }
@@ -64,7 +64,8 @@ public class Discrete_Stochastic_Simulation {
         } else if (args[0].equals("-r")) {
             System.out.println("Saving Parameters");
             Read_parameters(Arrays.copyOfRange(args, 1, args.length));
-            this.graph = new WeightedGraph(Math.round(this.Parameters.get("n")), Math.round(this.Parameters.get("a")), "v"+args[3]);
+            this.graph = new WeightedGraph(Math.round(this.Parameters.get("n")), Math.round(this.Parameters.get("a")),
+                    "v" + args[3]);
             this.graph.createGraphWithHamiltonianCircuit();
             this.graph.setNestNode("v" + this.Parameters.get("n1"));
 
@@ -76,7 +77,7 @@ public class Discrete_Stochastic_Simulation {
         // graph.createGraphWithHamiltonianCircuit();
         // graph.printGraph();
         Print_Parameters_Graph();
-        colony=new Colony(Math.round(Parameters.get("nu")), Float.toString(Parameters.get("n1")));
+        colony = new Colony(Math.round(Parameters.get("nu")), Float.toString(Parameters.get("n1")));
 
     }
 
@@ -107,8 +108,8 @@ public class Discrete_Stochastic_Simulation {
         // for (AntI ant : colony.getAnts()) {
         for (Ant ant : colony.getAnts()) {
 
-            events.add(new AntMoveEvent(graph,ant, currentTime,
-            		Parameters.get("alpha"), Parameters.get("beta"),Parameters.get("delta")));
+            events.add(new AntMoveEvent(graph, ant, currentTime,
+                    Parameters.get("alpha"), Parameters.get("beta"), Parameters.get("delta")));
         }
         double obs_message_time = this.Parameters.get("tau") / 20;
         int num_moves = 0;
@@ -120,16 +121,15 @@ public class Discrete_Stochastic_Simulation {
                 currentTime = Event.getTime();
                 if (Event instanceof AntMoveEvent) {
                     AntMoveEvent event = (AntMoveEvent) Event;
-                    Ant ant = event.get();
+                    event.get(events, currentTime, Parameters, nodes_Queue);
                     // ant.move();
                     num_moves += 1;
-                    events.add(new AntMoveEvent(graph,ant, currentTime,Parameters.get("alpha"), Parameters.get("beta"),Parameters.get("delta")));
-                    
+
                 } else {
                     PheromoneEVEvent event = (PheromoneEVEvent) Event;
-                    Edge edge = event.get();
+                    event.get(events, currentTime, Parameters.get("eta"), Parameters.get("rho"));
                     num_evaporations += 1;
-                    events.add(new PheromoneEVEvent(edge, currentTime, Parameters.get("n")));
+
                 }
             } else {
                 break;
@@ -141,8 +141,18 @@ public class Discrete_Stochastic_Simulation {
                 System.out.println("\tPresent instant:" + currentTime);
                 System.out.println("\tNumber of move events:" + num_moves);
                 System.out.println("\tNumber of evaporations:" + num_evaporations);
+
                 System.out.println("\tTop candidate cycles:");
+                PriorityQueue<Halmiton_cicles> tmp_Queue = new PriorityQueue<Halmiton_cicles>(nodes_Queue);
+                while (!tmp_Queue.isEmpty()) {
+                    Halmiton_cicles obj = tmp_Queue.poll();
+                    System.out.println("{" + obj.getNodes() + "}" + ":" + obj.getWeight());
+                }
                 System.out.println("\tBest Hamiltonian cycle:\n\n");
+                if (!nodes_Queue.isEmpty()) {
+                    Halmiton_cicles obj = nodes_Queue.peek();
+                    System.out.println("{" + obj.getNodes() + "}" + ":" + obj.getWeight());
+                }
 
             }
 
