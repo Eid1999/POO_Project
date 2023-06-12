@@ -2,25 +2,24 @@ package Colony;
 import java.util.*;
 import java.io.*;
 class AntMoveEvent extends Events {
-	private int ant;
+	private Ant ant;
 	// private Edge edge;
 	private double selfTime;
 	Random rand = new Random();
 	String type="AntMove";
+    private Edge edge;
 
-    public AntMoveEvent(int ant, double currentTime, float alpha, float beta, float delta) {
+    public AntMoveEvent(WeightedGraph graph,Ant ant, double currentTime, float alpha, float beta, float delta) {
         
         this.ant = ant;
         
-        
-        //Edge edge=ant.Optimization(graph, alpha, beta, delta);
-        // ant.Move(edge);
-	selfTime=exponentialDistribution(delta)+currentTime;
-        //selfTime=exponentialDistribution(edge.getWeight() * delta) + currentTime;
+        this.edge=ant.Optimization(graph,alpha,beta,delta);
+	    selfTime=exponentialDistribution(delta)+currentTime;
         super.UpdateTime(selfTime);
     }
     
-    public int get() {
+    public Ant get() {
+        ant.Move(edge);
         return ant;
     }
 }
