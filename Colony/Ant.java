@@ -51,7 +51,7 @@ public class Ant implements AntI {
 	public ArrayList<String> Move(Edge edge) {
 		String aux;
 		ArrayList<String> hamilton = new ArrayList<String>();
-		if (edge.equals(null)) {
+		if (edge == null) {
 			aux = this.getPosition();
 			hamilton = this.getPath();
 			this.path.clear();
