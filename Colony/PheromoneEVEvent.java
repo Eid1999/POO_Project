@@ -12,8 +12,6 @@ class PheromoneEVEvent extends Events  {
     }
     public Edge get() {
         return edge;
-    }
-
-    
+    }    
 
 }

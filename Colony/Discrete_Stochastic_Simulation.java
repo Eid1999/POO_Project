@@ -6,8 +6,10 @@ import java.io.*;
 public class Discrete_Stochastic_Simulation {
     protected HashMap<String, Float> Parameters = new HashMap<String, Float>();
     private String[] Parameters_Name = { "n", "a", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" }; // Parameters
+
+    
     protected WeightedGraph graph;
-    protected ColonyI colony;
+    protected Colony colony;
 
     public Discrete_Stochastic_Simulation(String[] args) {
         if (args.length < 1) {
@@ -74,6 +76,7 @@ public class Discrete_Stochastic_Simulation {
         // graph.createGraphWithHamiltonianCircuit();
         // graph.printGraph();
         Print_Parameters_Graph();
+        colony=new Colony(Math.round(Parameters.get("nu")), Float.toString(Parameters.get("n1")));
 
     }
 
@@ -102,9 +105,9 @@ public class Discrete_Stochastic_Simulation {
         double currentTime = 0;
         // PriorityQueue<> Pheno = new PriorityQueue<>();
         // for (AntI ant : colony.getAnts()) {
-        for (int index = 0; index < Math.round(Parameters.get("nu")); index++) {
+        for (Ant ant : colony.getAnts()) {
 
-            events.add(new AntMoveEvent(index, currentTime,
+            events.add(new AntMoveEvent(graph,ant, currentTime,
             		Parameters.get("alpha"), Parameters.get("beta"),Parameters.get("delta")));
         }
         double obs_message_time = this.Parameters.get("tau") / 20;
@@ -117,11 +120,11 @@ public class Discrete_Stochastic_Simulation {
                 currentTime = Event.getTime();
                 if (Event instanceof AntMoveEvent) {
                     AntMoveEvent event = (AntMoveEvent) Event;
-                    int ant = event.get();
+                    Ant ant = event.get();
                     // ant.move();
                     num_moves += 1;
-                    events.add(new AntMoveEvent(ant, currentTime,
-                    		Parameters.get("alpha"), Parameters.get("beta"),Parameters.get("delta")));
+                    events.add(new AntMoveEvent(graph,ant, currentTime,Parameters.get("alpha"), Parameters.get("beta"),Parameters.get("delta")));
+                    
                 } else {
                     PheromoneEVEvent event = (PheromoneEVEvent) Event;
                     Edge edge = event.get();
