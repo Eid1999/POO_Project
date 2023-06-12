@@ -5,7 +5,7 @@ import java.io.*;
 
 public class Discrete_Stochastic_Simulation {
     protected HashMap<String, Float> Parameters = new HashMap<String, Float>();
-    private String[] Parameters_Name = { "n", "a", "n1", "alpha", "beta", "delta", "eta", "p", "y", "v", "t" }; // Parameters
+    private String[] Parameters_Name = { "n", "a", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" }; // Parameters
     protected WeightedGraph graph;
     protected ColonyI colony;
 
@@ -102,16 +102,17 @@ public class Discrete_Stochastic_Simulation {
         double currentTime = 0;
         // PriorityQueue<> Pheno = new PriorityQueue<>();
         // for (AntI ant : colony.getAnts()) {
-        for (int index = 0; index < Math.round(Parameters.get("v")); index++) {
+        for (int index = 0; index < Math.round(Parameters.get("nu")); index++) {
 
-            events.add(new AntMoveEvent(index, currentTime, Parameters.get("delta")));
+            events.add(new AntMoveEvent(index, currentTime,
+            		Parameters.get("alpha"), Parameters.get("beta"),Parameters.get("delta")));
         }
-        double obs_message_time = this.Parameters.get("t") / 20;
+        double obs_message_time = this.Parameters.get("tau") / 20;
         int num_moves = 0;
         int num_evaporations = 0;
-        while (currentTime < this.Parameters.get("t")) {
+        while (currentTime < this.Parameters.get("tau")) {
             Events Event = events.poll();
-            if (this.Parameters.get("t") > Event.getTime()) {
+            if (this.Parameters.get("tau") > Event.getTime()) {
 
                 currentTime = Event.getTime();
                 if (Event instanceof AntMoveEvent) {
@@ -119,7 +120,8 @@ public class Discrete_Stochastic_Simulation {
                     int ant = event.get();
                     // ant.move();
                     num_moves += 1;
-                    events.add(new AntMoveEvent(ant, currentTime, Parameters.get("delta")));
+                    events.add(new AntMoveEvent(ant, currentTime,
+                    		Parameters.get("alpha"), Parameters.get("beta"),Parameters.get("delta")));
                 } else {
                     PheromoneEVEvent event = (PheromoneEVEvent) Event;
                     Edge edge = event.get();
@@ -131,7 +133,7 @@ public class Discrete_Stochastic_Simulation {
             }
 
             if (currentTime >= obs_message_time) {
-                obs_message_time += this.Parameters.get("t") / 20;
+                obs_message_time += this.Parameters.get("tau") / 20;
                 System.out.println("\n\nObservation numbers:");
                 System.out.println("\tPresent instant:" + currentTime);
                 System.out.println("\tNumber of move events:" + num_moves);

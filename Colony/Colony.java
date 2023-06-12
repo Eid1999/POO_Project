@@ -2,7 +2,7 @@ package Colony;
 
 import java.util.ArrayList;
 
-public class Colony {
+public class Colony implements ColonyI {
 
 	protected String nest;
 	protected ArrayList<Ant> ant = new ArrayList<Ant>();
