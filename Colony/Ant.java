@@ -48,12 +48,12 @@ public class Ant implements AntI {
 	}
 	
 	// rework
-	public ArrayList<String> Move(Edge edge) {
+	public ArrayList<Edge> Move(WeightedGraph graph, Edge edge) {
 		String aux;
-		ArrayList<String> hamilton = new ArrayList<String>();
+		ArrayList<Edge> hamilton = new ArrayList<Edge>();
 		if (edge == null) {
 			aux = this.getPosition();
-			hamilton = this.getPath();
+			hamilton = this.getPathAsEdges(graph, this.path);
 			this.path.clear();
 			this.path.add(aux);
 			return hamilton;
