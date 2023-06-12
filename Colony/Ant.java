@@ -11,7 +11,7 @@ public class Ant implements AntI {
 	}
 
 	// methods
-
+	
 	public String getPosition() {
 		return this.path.get(path.size()-1);
 	}
@@ -29,6 +29,15 @@ public class Ant implements AntI {
 		   }
 		 }
 		 return unvisited;
+	}
+	
+	//
+	public ArrayList<Edge> getPathAsEdges(WeightedGraph graph, ArrayList<String> nodes) {
+		ArrayList<Edge> edgelist = new ArrayList<Edge>();
+		for (int i = 1; i < nodes.size(); i++) {
+			edgelist.add(graph.getEdge(nodes.get(i-1), nodes.get(i)));
+		}
+		return edgelist;
 	}
 	
 	// replace back
@@ -64,7 +73,7 @@ public class Ant implements AntI {
 				String aux = this.path.get(0);
 				this.path.clear(); // removeAll ?
 				nextedge = graph.getEdge(this.getPosition(), aux);
-				// HERE: trigger pheromone release
+				// HERE: trigger pheromone release, need path before
 				return nextedge;
 			}
 			else {
