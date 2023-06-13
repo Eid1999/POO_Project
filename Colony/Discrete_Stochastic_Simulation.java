@@ -8,7 +8,7 @@ public class Discrete_Stochastic_Simulation {
     protected HashMap<String, Float> Parameters = new HashMap<String, Float>();
     private String[] Parameters_Name = { "n", "a", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" };
     private ArrayList<ArrayList<String>> top_Candidates;// Parameters
-    PriorityQueue<Halmiton_cicles> nodes_Queue = new PriorityQueue<Halmiton_cicles>();
+    PriorityQueue<Hamiltonian_Candidates> nodes_Queue = new PriorityQueue<Hamiltonian_Candidates>();
     protected WeightedGraph graph;
     protected Colony colony;
 
@@ -143,14 +143,15 @@ public class Discrete_Stochastic_Simulation {
                 System.out.println("\tNumber of evaporations:" + num_evaporations);
 
                 System.out.println("\tTop candidate cycles:");
-                PriorityQueue<Halmiton_cicles> tmp_Queue = new PriorityQueue<Halmiton_cicles>(nodes_Queue);
+                PriorityQueue<Hamiltonian_Candidates> tmp_Queue = new PriorityQueue<Hamiltonian_Candidates>(
+                        nodes_Queue);
                 while (!tmp_Queue.isEmpty()) {
-                    Halmiton_cicles obj = tmp_Queue.poll();
+                    Hamiltonian_Candidates obj = tmp_Queue.poll();
                     System.out.println("{" + obj.getNodes() + "}" + ":" + obj.getWeight());
                 }
                 System.out.println("\tBest Hamiltonian cycle:\n\n");
                 if (!nodes_Queue.isEmpty()) {
-                    Halmiton_cicles obj = nodes_Queue.peek();
+                    Hamiltonian_Candidates obj = nodes_Queue.peek();
                     System.out.println("{" + obj.getNodes() + "}" + ":" + obj.getWeight());
                 }
 

@@ -2,11 +2,11 @@ package Colony;
 
 import java.util.ArrayList;
 
-public class Halmiton_cicles implements Comparable<Halmiton_cicles> {
+public class Hamiltonian_Candidates implements Comparable<Hamiltonian_Candidates> {
     protected float weight;
     protected ArrayList<String> nodes;
 
-    public Halmiton_cicles(float weight, ArrayList<String> nodes) {
+    public Hamiltonian_Candidates(float weight, ArrayList<String> nodes) {
         this.weight = weight;
         this.nodes = nodes;
 
@@ -21,7 +21,7 @@ public class Halmiton_cicles implements Comparable<Halmiton_cicles> {
     }
 
     @Override
-    public int compareTo(Halmiton_cicles other) {
+    public int compareTo(Hamiltonian_Candidates other) {
         return Double.compare(this.getWeight(), other.getWeight());
     }
 
