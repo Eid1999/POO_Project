@@ -4,67 +4,68 @@ import java.util.*;
 
 public class Ant implements AntI {
 	private ArrayList<String> path = new ArrayList<String>();
-	
+
 	// constructor
 	Ant(String nest) {
 		path.add(nest);
 	}
 
 	// methods
-	
+
 	// gets current position from path
 	public String getPosition() {
 		int sz = path.size();
-		return path.get(sz-1);
+		return path.get(sz - 1);
 	}
-	
+
 	// gets path (list of visited nodes as strings)
 	public ArrayList<String> getPath() {
-        return path;
+		return path;
 	}
-	
+
 	// returns a list that only contains the unvisited nodes
 	// from a given set of nodes
-	public ArrayList<String> getUnvisited (List<String> nodelst) {
-		 ArrayList<String> unvisited = new ArrayList<String>();
-		 for (int i = 0; i < nodelst.size(); i++) {
-		   if (!(path.contains(nodelst.get(i)))) {
-			   unvisited.add(nodelst.get(i));
-		   }
-		 }
-		 return unvisited;
+	public ArrayList<String> getUnvisited(List<String> nodelst) {
+		ArrayList<String> unvisited = new ArrayList<String>();
+		for (int i = 0; i < nodelst.size(); i++) {
+			if (!(path.contains(nodelst.get(i)))) {
+				unvisited.add(nodelst.get(i));
+			}
+		}
+		return unvisited;
 	}
-	
+
 	// releases pheromones in every edge of the path upon completing the cycle
 	// and also resets the ant's path in order to start a new search.
 	// also returns the completed cycle as a <directed> edge list
-	public void releasePheromones(WeightedGraph graph, double phero)  {
+	public void releasePheromones(WeightedGraph graph, double phero, PriorityQueue<Events> events, double currentTime,
+			float eta) {
 		String aux = getPosition();
 		for (int i = 1; i < path.size(); i++) {
-			graph.updatePheromones(path.get(i-1), path.get(i), phero);
+			graph.updatePheromones(path.get(i - 1), path.get(i), phero, events, currentTime, eta, graph);
 		}
 		path.clear();
 		path.add(aux);
 	}
-	
+
 	// removes a portion of the path in order to prevent loops
-	public void preventLoop (String checkmark) {
+	public void preventLoop(String checkmark) {
 		for (int i = path.indexOf(checkmark); i < path.size(); i++) {
 			path.remove(i);
 		}
 	}
-	
+
 	// move ant along edge and update path array accordingly
 	public void Move(Edge edge) {
-			int sz = path.size();
-			if ((edge.getDestination()).equals(path.get(sz-1))) {
-				path.add(edge.getSource());
-			}
-			if ((edge.getSource()).equals(path.get(sz-1))) {
-				path.add(edge.getDestination());
-			}
+		int sz = path.size();
+		if ((edge.getDestination()).equals(path.get(sz - 1))) {
+			path.add(edge.getSource());
+		}
+		if ((edge.getSource()).equals(path.get(sz - 1))) {
+			path.add(edge.getDestination());
+		}
 	}
-	
+
 	// picks next edge to move to
 	public Edge Optimization(WeightedGraph graph, float alpha, float beta, float delta) {
 		double p = Math.random(); // random roll (double between 0 and 1)
@@ -77,12 +78,12 @@ public class Ant implements AntI {
 		List<String> adj = new ArrayList<String>(); // adjacent nodes
 		adj = graph.getNeighbors(getPosition());
 		unvis = getUnvisited(adj);
-		
+
 		// case where all adjacent nodes have been visited
 		if (unvis.isEmpty()) {
 			// calculate (uniform) probability for each node
 			for (int i = 0; i < adj.size(); i++) {
-				prob.add(1.0/((double)(adj.size())));
+				prob.add(1.0 / ((double) (adj.size())));
 			}
 			// pick path by summing probabilities in list
 			for (int i = 0; i <= adj.size(); i++) {
