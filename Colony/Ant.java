@@ -42,7 +42,7 @@ public class Ant implements AntI {
 			float eta) {
 		String aux = getPosition();
 		for (int i = 1; i < path.size(); i++) {
-			graph.updatePheromones(path.get(i - 1), path.get(i), phero, events, currentTime, eta, graph);
+			graph.updatePheromones(path.get(i - 1), path.get(i), phero, events, currentTime, eta);
 		}
 		path.clear();
 		path.add(aux);
