@@ -13,18 +13,14 @@ public class Main {
     }
 }
 // public class Main {
-// public static void main(String[] args) {
+//     public static void main(String[] args) {
 
-// Colony colony = new Colony(7,"n1");
-// System.out.println("The size of the Colony is: " + colony.getSize());
-// WeightedGraph graph = new WeightedGraph(4, 10, "v1");
-// graph.createGraphWithHamiltonianCircuit();
-// graph.printGraph();
-// graph.printAdjMatrix();
-// graph.getEdge("v1",
-// graph.getAdjancyMap().get("v1").get(0).getDestination()).setPheromone(4);
-// List <Edge> edgeWithPhero = graph.getEdgesWithPheromones();
-// System.out.println(edgeWithPhero);
-
-// }
+//         Colony colony = new Colony(7, "n1");
+//         System.out.println("The size of the Colony is: " + colony.getSize());
+//         WeightedGraph graph = new WeightedGraph(4, 3, "v1");
+//         graph.createGraphWithHamiltonianCircuit();
+//         graph.printGraph();
+//         graph.printAdjMatrix();
+//         System.out.println(" " + graph.getAllWeightsSum());
+//     }
 // }

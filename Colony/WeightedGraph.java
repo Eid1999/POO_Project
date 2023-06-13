@@ -92,6 +92,16 @@ public class WeightedGraph implements Graph<String, Edge> {
         return allEdges;
     }
 
+    public double getAllWeightsSum() {
+        double weightSum = 0;
+        for (List<Edge> edges : adjacencyMap.values()) {
+            for (Edge edge : edges) {
+                weightSum += edge.getWeight();
+            }
+        }
+        return weightSum/2;
+    }
+
     public List<Edge> getEdgesWithPheromones() {
         List<Edge> allEdges = new ArrayList<>();
         for (List<Edge> edges : adjacencyMap.values()) {

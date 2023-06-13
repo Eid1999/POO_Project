@@ -11,7 +11,8 @@ public interface Graph<V, E> {
     E getEdge(V source, V destination);
     List<V> getVertices();
     List<V> getNeighbors(V vertex);
-    List<E> getEdges();
+    public double getAllWeightsSum();
+    public List<Edge> getEdges();
     void printGraph();
     void printAdjMatrix();
 }
