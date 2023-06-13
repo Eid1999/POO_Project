@@ -2,16 +2,14 @@ package Colony;
 
 import java.util.*;
 
-
 public class WeightedGraph implements Graph<String, Edge> {
     private Map<String, List<Edge>> adjacencyMap;
     private int numVertices;
     private double maxWeight;
-    private String nestNode;
 
-    public WeightedGraph(int numVertices, double maxWeight, String n1) {
+    public WeightedGraph(int numVertices, double maxWeight) {
         adjacencyMap = new HashMap<>();
-        this.nestNode= n1;
+
         this.numVertices = numVertices;
         this.maxWeight = maxWeight;
     }
@@ -19,14 +17,6 @@ public class WeightedGraph implements Graph<String, Edge> {
         return adjacencyMap;
     }
 
-    public String getNestNode(){
-        return nestNode;
-    }
-
-    public void setNestNode(String nestNode){
-        this.nestNode = nestNode;
-    }
-    
     public void addVertex(String vertex) {
         adjacencyMap.put(vertex, new ArrayList<>());
     }
@@ -92,16 +82,6 @@ public class WeightedGraph implements Graph<String, Edge> {
         return allEdges;
     }
 
-    public double getAllWeightsSum() {
-        double weightSum = 0;
-        for (List<Edge> edges : adjacencyMap.values()) {
-            for (Edge edge : edges) {
-                weightSum += edge.getWeight();
-            }
-        }
-        return weightSum/2;
-    }
-
     public List<Edge> getEdgesWithPheromones() {
         List<Edge> allEdges = new ArrayList<>();
         for (List<Edge> edges : adjacencyMap.values()) {
@@ -112,11 +92,6 @@ public class WeightedGraph implements Graph<String, Edge> {
             }
         }
         return allEdges;
-    }
-
-    public void updatePheromones(String a, String b, double pheromone){
-        getEdge(a, b).setPheromone(pheromone);
-        getEdge(b, a).setPheromone(pheromone);
     }
 
     public WeightedGraph createGraphWithHamiltonianCircuit() {
@@ -130,18 +105,14 @@ public class WeightedGraph implements Graph<String, Edge> {
 
         // Create a list of vertices in random order
         List<String> vertices = new ArrayList<>(this.getVertices());
-        vertices.remove(this.nestNode);
         Collections.shuffle(vertices);
-        vertices.add(0, this.nestNode);
         // Connect the vertices in a circular manner to guarantee a Hamiltonian circuit
         for (int i = 0; i < numVertices; i++) {
-
             startVertex = vertices.get(i);
-            System.out.println(startVertex);
             endVertex = vertices.get((i + 1) % numVertices);
             this.addEdge(startVertex, endVertex, getRandomWeight(maxWeight));
         }
-        
+
         // Add additional random edges to each vertex
         for (String vertex : this.getVertices()) {
             int numEdges = random.nextInt(numVertices - 1); // Generate a random number of edges (1 to numVertices)
@@ -163,7 +134,7 @@ public class WeightedGraph implements Graph<String, Edge> {
     }
 
     public void printGraph() {
-        System.out.println("Nodes:");
+        System.out.println("Vertices:");
         for (String vertex : this.getVertices()) {
             System.out.println(vertex);
         }
