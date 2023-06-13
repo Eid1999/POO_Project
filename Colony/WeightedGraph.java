@@ -114,9 +114,9 @@ public class WeightedGraph implements Graph<String, Edge> {
         return allEdges;
     }
 
-    public void updatePheromones(String source, String dest, double pheromone){
-        getEdge(source, dest).setPheromone(pheromone);
-        getEdge(dest, source).setPheromone(pheromone);
+    public void updatePheromones(String a, String b, double pheromone){
+        getEdge(a, b).setPheromone(pheromone);
+        getEdge(b, a).setPheromone(pheromone);
     }
 
     public WeightedGraph createGraphWithHamiltonianCircuit() {

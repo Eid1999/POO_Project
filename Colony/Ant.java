@@ -5,123 +5,133 @@ import java.util.*;
 public class Ant implements AntI {
 	private ArrayList<String> path = new ArrayList<String>();
 	
-	// constructor
+	// constructor [FINAL]
 	Ant(String nest) {
-		this.path.add(nest);
+		path.add(nest);
 	}
 
 	// methods
 	
+	// gets current position from path [FINAL]
 	public String getPosition() {
-		return this.path.get(path.size()-1);
+		return path.get(path.size()-1);
 	}
 	
+	// gets path (list of visited nodes as strings) [FINAL]
 	public ArrayList<String> getPath() {
-        return this.path;
+        return path;
 	}
 	
-	// subset of adjacent
+	// returns a list that only contains the unvisited nodes
+	// from a given set of nodes [FINAL]
 	public ArrayList<String> getUnvisited (List<String> nodelst) {
 		 ArrayList<String> unvisited = new ArrayList<String>();
 		 for (int i = 0; i < nodelst.size(); i++) {
-		   if (!(this.path.contains(nodelst.get(i)))) {
+		   if (!(path.contains(nodelst.get(i)))) {
 			   unvisited.add(nodelst.get(i));
 		   }
 		 }
 		 return unvisited;
 	}
 	
-	//
-	public ArrayList<Edge> getPathAsEdges(WeightedGraph graph, ArrayList<String> nodes) {
+	// converts path (nodes as strings) into a list of <directed> edges [FINAL]
+	public ArrayList<Edge> getPathAsEdges(WeightedGraph graph) {
 		ArrayList<Edge> edgelist = new ArrayList<Edge>();
-		for (int i = 1; i < nodes.size(); i++) {
-			edgelist.add(graph.getEdge(nodes.get(i-1), nodes.get(i)));
+		for (int i = 1; i < path.size(); i++) {
+			edgelist.add(graph.getEdge(path.get(i-1), path.get(i)));
 		}
 		return edgelist;
 	}
 	
-	// replace back
-	public void preventLoop (String checkmark) {
-		for (int i = this.path.indexOf(checkmark); i < this.path.size(); i++) {
-			this.path.remove(i);
+	// checks for completed Hamiltonian Cycle [FINAL]
+	public boolean checkHamilton() {
+		if ((path.get(0)).equals(getPosition())) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 	
-	// rework
-	public ArrayList<Edge> Move(WeightedGraph graph, Edge edge) {
-		String aux;
+	// releases pheromones in every edge of the path upon completing the cycle
+	// and also resets the ant's path in order to start a new search.
+	// also returns the completed cycle as a <directed> edge list [FINAL]
+	public ArrayList<Edge> releasePheromones(WeightedGraph graph, double phero)  {
+		String aux = getPosition();
 		ArrayList<Edge> hamilton = new ArrayList<Edge>();
-		if (edge == null) {
-			aux = this.getPosition();
-			hamilton = this.getPathAsEdges(graph, this.path);
-			this.path.clear();
-			this.path.add(aux);
-			return hamilton;
+		hamilton = getPathAsEdges(graph);
+		for (int i = 1; i < path.size(); i++) {
+			graph.updatePheromones(path.get(i-1), path.get(i), phero);
 		}
-		else {
-			// comment out ifs
+		path.clear();
+		path.add(aux);
+		return hamilton;
+	}
+	
+	// removes a portion of the path in order to prevent loops [RECHECK]
+	public void preventLoop (String checkmark) {
+		for (int i = path.indexOf(checkmark); i < path.size(); i++) {
+			path.remove(i);
+		}
+	}
+	
+	// move ant along edge and update path array accordingly [FINAL]
+	public void Move(Edge edge) {
 			if ((edge.getDestination()).equals(path.get(path.size()-1))) {
-				this.path.add(edge.getSource());
+				path.add(edge.getSource());
 			}
 			if ((edge.getSource()).equals(path.get(path.size()-1))) {
-				this.path.add(edge.getDestination());
+				path.add(edge.getDestination());
 			}
-			return null;
-		}
-
 	}
 	
-	//
+	// picks next edge to move to [CARE]
 	public Edge Optimization(WeightedGraph graph, float alpha, float beta, float delta) {
-		Edge nextedge = null;
-		double p = 0.00;
-		double sum = 0.00;
-		double cumulativeProbability = 0.00;
-		ArrayList<String> unvis = new ArrayList<String>();
-		ArrayList<Double> prob = new ArrayList<Double>();
-		List<String> adj = new ArrayList<String>();
-		adj = graph.getNeighbors(this.getPosition());
-		unvis = this.getUnvisited(adj);
+		double p = Math.random(); // random roll (double between 0 and 1)
+		double sum = 0.00; // used as the sum of all probabilities
+		double cumulativeProbability = 0.00; // used for the random roll
+		Edge nextedge = null; // next position (return)
+		Edge possedge = null; // auxiliary
+		ArrayList<String> unvis = new ArrayList<String>(); // unvisited nodes
+		ArrayList<Double> prob = new ArrayList<Double>(); // probability of each node
+		List<String> adj = new ArrayList<String>(); // adjacent nodes
+		adj = graph.getNeighbors(getPosition());
+		unvis = getUnvisited(adj);
+		
+		// case where all adjacent nodes have been visited
 		if (unvis.isEmpty()) {
-			if (this.getPosition().equals(this.path.get(0))) {
-				// String aux = this.path.get(0);
-				// this.path.clear(); // removeAll ?
-				// nextedge = graph.getEdge(this.getPosition(), aux);
-				nextedge = null;
-				// HERE: trigger pheromone release, need to keep path!!!
-				return nextedge;
-			}
-			else {
-				for (int i = 0; i < adj.size(); i++) {
-					prob.add( 1.0/ (float) (adj.size()));
-				}
-				p = Math.random();
-				for (int i = 0; i <= adj.size(); i++) {
-				    cumulativeProbability += Double.valueOf(adj.get(i));
-				    if (p <= cumulativeProbability) {
-				    	this.preventLoop(adj.get(i)); //
-				    	nextedge = graph.getEdge(this.getPosition(), adj.get(i));
-				    	return nextedge;
-				    }
-				}
-			}
-		}
-		else {
+			// calculate (uniform) probability for each node
 			for (int i = 0; i < adj.size(); i++) {
-				nextedge = graph.getEdge(this.getPosition(), adj.get(i));
-				prob.add((alpha + nextedge.getPheromone())
-						/ (beta + nextedge.getWeight()));
-				sum += Double.valueOf(adj.get(i));
+				prob.add(1.0/((double)(adj.size())));
 			}
-			p = Math.random();
+			// pick path by summing probabilities in list
 			for (int i = 0; i <= adj.size(); i++) {
-			    cumulativeProbability += Double.valueOf(adj.get(i)) / sum;
-			    if (p <= cumulativeProbability) {
-			    	nextedge = graph.getEdge(this.getPosition(), adj.get(i));
-			    	return nextedge;
-			    }
+				cumulativeProbability += prob.get(i);
+				if (p <= cumulativeProbability) {
+					preventLoop(adj.get(i)); // prevents unwanted loop
+					nextedge = graph.getEdge(getPosition(), adj.get(i));
+					break;
+				}
 			}
 		}
-		return nextedge; // required out of else
+		// case where there's unvisited adjacent nodes
+		else {
+			// calculate probability for each node (parameter/weight/pheromone based)
+			for (int i = 0; i < adj.size(); i++) {
+				possedge = graph.getEdge(getPosition(), adj.get(i));
+				prob.add((alpha + possedge.getPheromone())
+						/ (beta + possedge.getWeight()));
+				sum += prob.get(i); // increment sum for later calculation
+			}
+			// divide each member by sum for correct probability
+			for (int i = 0; i <= adj.size(); i++) {
+				cumulativeProbability += prob.get(i) / sum;
+				if (p <= cumulativeProbability) {
+					nextedge = graph.getEdge(getPosition(), adj.get(i));
+					break;
+				}
+			}
+		}
+		return nextedge;
 	}
 }
