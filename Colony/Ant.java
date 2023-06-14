@@ -94,7 +94,7 @@ public class Ant implements AntI {
 				cumulativeProbability += prob.get(i);
 				if (p <= cumulativeProbability) {
 					preventLoop(adj.get(i)); // prevents unwanted loop
-					nextedge = graph.getEdge(getPosition(), adj.get(i));
+					nextedge = graph.getEdge("v"+getPosition(), adj.get(i));
 					break;
 				}
 			}
