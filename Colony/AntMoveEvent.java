@@ -19,7 +19,7 @@ class AntMoveEvent extends Events {
         this.ant = ant;
         this.graph = graph;
         this.Edge = ant.Optimization(graph, alpha, beta, delta);
-        super.selfTime = exponentialDistribution(delta) + currentTime;
+        super.selfTime = exponentialDistribution(delta)*Edge.getWeight() + currentTime;
 
     }
 
