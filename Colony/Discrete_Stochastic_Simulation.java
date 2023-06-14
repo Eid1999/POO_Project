@@ -67,7 +67,7 @@ public class Discrete_Stochastic_Simulation {
             this.graph = new WeightedGraph(Math.round(this.Parameters.get("n")), Math.round(this.Parameters.get("a")),
                     "v" + args[3]);
             this.graph.createGraphWithHamiltonianCircuit();
-            this.graph.setNestNode("v" + this.Parameters.get("n1"));
+            this.graph.setNestNode("v" + Math.round(this.Parameters.get("n1")));
 
         } else {
             System.out.println("Invalid arguments given\nExiting Program");
