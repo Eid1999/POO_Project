@@ -114,11 +114,8 @@ public class WeightedGraph implements Graph<String, Edge> {
         return allEdges;
     }
 
-    public void updatePheromones(String a, String b, double pheromone, PriorityQueue<Events> events, double currentTime,
-            float eta) {
-        if (getEdge(a, b).getPheromone() != 0) {
-            events.add(new PheromoneEVEvent(getEdge(a, b), currentTime, eta, this));
-        }
+    public void updatePheromones(String a, String b, double pheromone) {
+
         getEdge(a, b).setPheromone(pheromone);
         getEdge(b, a).setPheromone(pheromone);
     }
