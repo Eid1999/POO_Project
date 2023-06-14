@@ -101,9 +101,9 @@ public class Ant implements AntI {
 		}
 		// case where there's unvisited adjacent nodes
 		else {
-			// calculate probability for each node (parameter/weight/pheromone based)
+			// calculate prpossedgeobability for each node (parameter/weight/pheromone based)
 			for (int i = 0; i < adj.size(); i++) {
-				possedge = graph.getEdge(getPosition(), adj.get(i));
+				possedge = graph.getEdge("v"+getPosition(), adj.get(i));
 				prob.add((alpha + possedge.getPheromone())
 						/ (beta + possedge.getWeight()));
 				sum += prob.get(i); // increment sum for later calculation
@@ -112,7 +112,7 @@ public class Ant implements AntI {
 			for (int i = 0; i <= adj.size(); i++) {
 				cumulativeProbability += prob.get(i) / sum;
 				if (p <= cumulativeProbability) {
-					nextedge = graph.getEdge(getPosition(), adj.get(i));
+					nextedge = graph.getEdge("v"+getPosition(), adj.get(i));
 					break;
 				}
 			}
