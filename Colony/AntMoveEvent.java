@@ -27,7 +27,9 @@ class AntMoveEvent extends Events {
             HashMap<String, Float> Parameters, PriorityQueue<Hamiltonian_Candidates> nodes_Queue) {
 
         float weight_circle = 0;
-        nodes = ant.getPath();
+        ant.Move(Edge);
+        nodes = new ArrayList<String>(ant.getPath());
+        
         array_edge = graph.checkHamilton(ant.getPath());
         if (!array_edge.isEmpty()) {
             for (Edge edge : array_edge) {
@@ -35,12 +37,12 @@ class AntMoveEvent extends Events {
             }
             ant.releasePheromones(graph, (Parameters.get("gamma") * W) / weight_circle, events, currentTime,
                     Parameters.get("eta"));
-            nodes.add(array_edge.get(array_edge.size() - 1).getDestination());
             nodes_Queue.add(new Hamiltonian_Candidates(weight_circle, nodes));
         }
-        ant.Move(Edge);
+        
         events.add(new AntMoveEvent(graph, ant, currentTime, Parameters.get("alpha"), Parameters.get("beta"),
                 Parameters.get("delta")));
+        
 
     }
 }

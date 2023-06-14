@@ -7,7 +7,7 @@ public class Ant implements AntI {
 
 	// constructor
 	Ant(String nest) {
-		path.add(nest);
+		path.add("v"+nest);
 	}
 
 	// methods
@@ -43,7 +43,7 @@ public class Ant implements AntI {
 		String aux = getPosition();
 		for (int i = 1; i < path.size(); i++) {
 			graph.updatePheromones(path.get(i - 1), path.get(i), phero);
-			Edge edge = graph.getEdge(path.get(i - 1), path.get(i - 1));
+			Edge edge = graph.getEdge(path.get(i - 1), path.get(i));
 			if (edge.getPheromone() != 0) {
 				events.add(new PheromoneEVEvent(edge, currentTime, eta, graph));
 			}
@@ -61,14 +61,8 @@ public class Ant implements AntI {
 
 	// move ant along edge and update path array accordingly
 	public void Move(Edge edge) {
-		int sz = path.size();
-		if ((edge.getDestination()).equals(path.get(sz - 1))) {
-			path.add(edge.getSource());
+		path.add(edge.getDestination());
 		}
-		if ((edge.getSource()).equals(path.get(sz - 1))) {
-			path.add(edge.getDestination());
-		}
-	}
 
 	// picks next edge to move to
 	public Edge Optimization(WeightedGraph graph, float alpha, float beta, float delta) {
@@ -80,7 +74,7 @@ public class Ant implements AntI {
 		ArrayList<String> unvis = new ArrayList<String>(); // unvisited nodes
 		ArrayList<Double> prob = new ArrayList<Double>(); // probability of each node
 		List<String> adj = new ArrayList<String>(); // adjacent nodes
-		adj = graph.getNeighbors("v"+getPosition());
+		adj = graph.getNeighbors(getPosition());
 		unvis = getUnvisited(adj);
 
 		// case where all adjacent nodes have been visited
@@ -93,8 +87,10 @@ public class Ant implements AntI {
 			for (int i = 0; i <= adj.size(); i++) {
 				cumulativeProbability += prob.get(i);
 				if (p <= cumulativeProbability) {
-					preventLoop(adj.get(i)); // prevents unwanted loop
-					nextedge = graph.getEdge("v"+getPosition(), adj.get(i));
+					if(path.size()>3 && path.get(path.size()-1)==path.get(path.size()-3) && path.get(0)!=path.get(path.size()-1)){
+						preventLoop(adj.get(i));
+					} // prevents unwanted loop
+					nextedge = graph.getEdge(getPosition(), adj.get(i));
 					break;
 				}
 			}
@@ -103,7 +99,7 @@ public class Ant implements AntI {
 		else {
 			// calculate prpossedgeobability for each node (parameter/weight/pheromone based)
 			for (int i = 0; i < adj.size(); i++) {
-				possedge = graph.getEdge("v"+getPosition(), adj.get(i));
+				possedge = graph.getEdge(getPosition(), adj.get(i));
 				prob.add((alpha + possedge.getPheromone())
 						/ (beta + possedge.getWeight()));
 				sum += prob.get(i); // increment sum for later calculation
@@ -112,7 +108,7 @@ public class Ant implements AntI {
 			for (int i = 0; i <= adj.size(); i++) {
 				cumulativeProbability += prob.get(i) / sum;
 				if (p <= cumulativeProbability) {
-					nextedge = graph.getEdge("v"+getPosition(), adj.get(i));
+					nextedge = graph.getEdge(getPosition(), adj.get(i));
 					break;
 				}
 			}

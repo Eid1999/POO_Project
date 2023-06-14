@@ -132,13 +132,11 @@ public class WeightedGraph implements Graph<String, Edge> {
     // checks for completed Hamiltonian Cycle
     public ArrayList<Edge> checkHamilton(ArrayList<String> visited) {
         int sz = visited.size();
+        ArrayList<Edge> hamilton = new ArrayList<Edge>();
         if ((visited.get(0)).equals(visited.get(sz - 1))) {
-            ArrayList<Edge> hamilton = new ArrayList<Edge>();
             hamilton = getPathAsEdges(visited);
-            return hamilton;
-        } else {
-            return null;
-        }
+        }    
+        return hamilton;
     }
 
     public WeightedGraph createGraphWithHamiltonianCircuit() {
