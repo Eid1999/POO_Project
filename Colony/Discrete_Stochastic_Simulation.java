@@ -49,7 +49,7 @@ public class Discrete_Stochastic_Simulation {
                             if (weight != 0) {
                                 String source = "v" + Integer.toString(i);
                                 String destination = "v" + Integer.toString(j + 1);
-                                graph.addEdge(source, destination, weight);
+                                graph.add1Edge(source, destination, weight);
                             }
                         }
                     }
@@ -162,7 +162,7 @@ public class Discrete_Stochastic_Simulation {
 
     public void Print_Parameters_Graph() {
         System.out.println("\nInput Parameters:");
-        for(String key:Parameters_Name){
+        for (String key : Parameters_Name) {
             System.out.println("\t" + key + ":" + Parameters.get(key));
         }
         System.out.println("\nWith Graph:\n");

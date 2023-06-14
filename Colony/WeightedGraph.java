@@ -31,6 +31,12 @@ public class WeightedGraph implements Graph<String, Edge> {
         adjacencyMap.put(vertex, new ArrayList<>());
     }
 
+    public void add1Edge(String source, String destination, double weight) {
+        List<Edge> sourceEdges = adjacencyMap.getOrDefault(source, new ArrayList<>());
+        sourceEdges.add(new Edge(source, destination, weight));
+        adjacencyMap.put(source, sourceEdges);
+    }
+
     public void addEdge(String source, String destination, double weight) {
         List<Edge> sourceEdges = adjacencyMap.getOrDefault(source, new ArrayList<>());
         sourceEdges.add(new Edge(source, destination, weight));
