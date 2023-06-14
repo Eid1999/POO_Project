@@ -162,7 +162,9 @@ public class Discrete_Stochastic_Simulation {
 
     public void Print_Parameters_Graph() {
         System.out.println("\nInput Parameters:");
-        this.Parameters.forEach((key, value) -> System.out.println("\t" + key + ":" + value));
+        for(String key:Parameters_Name){
+            System.out.println("\t" + key + ":" + Parameters.get(key));
+        }
         System.out.println("\nWith Graph:\n");
         graph.printAdjMatrix();
 
