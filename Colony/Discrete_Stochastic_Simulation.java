@@ -77,7 +77,7 @@ public class Discrete_Stochastic_Simulation {
         // graph.createGraphWithHamiltonianCircuit();
         // graph.printGraph();
         Print_Parameters_Graph();
-        colony = new Colony(Math.round(Parameters.get("nu")), Float.toString(Parameters.get("n1")));
+        colony = new Colony(Math.round(Parameters.get("nu")), Integer.toString(Math.round(Parameters.get("n1"))));
 
     }
 

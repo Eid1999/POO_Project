@@ -80,7 +80,7 @@ public class Ant implements AntI {
 		ArrayList<String> unvis = new ArrayList<String>(); // unvisited nodes
 		ArrayList<Double> prob = new ArrayList<Double>(); // probability of each node
 		List<String> adj = new ArrayList<String>(); // adjacent nodes
-		adj = graph.getNeighbors(getPosition());
+		adj = graph.getNeighbors("v"+getPosition());
 		unvis = getUnvisited(adj);
 
 		// case where all adjacent nodes have been visited
