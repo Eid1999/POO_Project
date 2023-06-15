@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 
 public class Discrete_Stochastic_Simulation {
     protected HashMap<String, Float> Parameters = new HashMap<String, Float>();
@@ -15,6 +16,7 @@ public class Discrete_Stochastic_Simulation {
     PriorityQueue<Hamiltonian_Candidates> nodes_Queue = new PriorityQueue<Hamiltonian_Candidates>();
     protected WeightedGraph graph;
     protected Colony colony;
+    PriorityQueue<Events> events = new PriorityQueue<>();
 
     public Discrete_Stochastic_Simulation(String[] args) {
         if (args.length < 1) {
@@ -106,7 +108,6 @@ public class Discrete_Stochastic_Simulation {
     }
 
     public void Simulation() {
-        PriorityQueue<Events> events = new PriorityQueue<>();
         double currentTime = 0;
         // PriorityQueue<> Pheno = new PriorityQueue<>();
         // for (AntI ant : colony.getAnts()) {
@@ -161,14 +162,20 @@ public class Discrete_Stochastic_Simulation {
                     }
                     Hamiltonian_Candidates obj = tmp_Queue.poll();
                     if (tmp_Queue.peek()==null || (!obj.getNodes().equals(tmp_Queue.peek().getNodes()))){
-                        System.out.println("\t\t{" + obj.getNodes() + "}" + ":" + obj.getWeight());
+                        String elements = obj.getNodes().stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining(", "));
+                        System.out.println("\t\t{" + elements + "}" + ":" + obj.getWeight());
                         i+=1;
                         
                     }
                 }
                 System.out.println("\tBest Hamiltonian cycle:");
                 if (!nodes_Queue.isEmpty()) {
-                    System.out.println("\t\t{" + best.getNodes() + "}" + ":" + best.getWeight());
+                    String elements = best.getNodes().stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining(", "));
+                    System.out.println("\t\t{" + elements + "}" + ":" + best.getWeight());
                 }
 
             }
