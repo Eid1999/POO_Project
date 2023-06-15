@@ -139,7 +139,7 @@ public class WeightedGraph implements Graph<String, Edge> {
     public ArrayList<Edge> checkHamilton(ArrayList<String> visited) {
         int sz = visited.size();
         ArrayList<Edge> hamilton = new ArrayList<Edge>();
-        if ((visited.get(0)).equals(visited.get(sz - 1)) && visited.size()==numVertices) {
+        if ((visited.get(0)).equals(visited.get(sz - 1)) && visited.size()==numVertices+1) {
             hamilton = getPathAsEdges(visited);
         }    
         return hamilton;

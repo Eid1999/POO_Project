@@ -53,9 +53,10 @@ public class Ant implements AntI {
 	}
 
 	// removes a portion of the path in order to prevent loops
-	public void preventLoop(String checkmark) {
-		for (int i = path.indexOf(checkmark); i < path.size(); i++) {
-			path.remove(i);
+	public void preventLoop(int checkmark) {
+		int size=path.size();
+		for(int i=checkmark;i<size-1;i++){
+			path.remove(checkmark);
 		}
 	}
 
@@ -76,7 +77,14 @@ public class Ant implements AntI {
 		List<String> adj = new ArrayList<String>(); // adjacent nodes
 		adj = graph.getNeighbors(getPosition());
 		unvis = getUnvisited(adj);
+		if(path.size()>=3){
+			for(int i=0; i<path.size()-1;i++){
+				if(path.get(path.size()-1).equals(path.get(i))){
+						preventLoop(i);
+				}
+			}
 
+		} // prevents unwanted loop
 		// case where all adjacent nodes have been visited
 		if (unvis.isEmpty()) {
 			// calculate (uniform) probability for each node
@@ -87,9 +95,6 @@ public class Ant implements AntI {
 			for (int i = 0; i <= adj.size(); i++) {
 				cumulativeProbability += prob.get(i);
 				if (p <= cumulativeProbability) {
-					if(path.size()>3 && path.get(path.size()-1)==path.get(path.size()-3) && path.get(0)!=path.get(path.size()-1)){
-						preventLoop(adj.get(i));
-					} // prevents unwanted loop
 					nextedge = graph.getEdge(getPosition(), adj.get(i));
 					break;
 				}
@@ -98,17 +103,17 @@ public class Ant implements AntI {
 		// case where there's unvisited adjacent nodes
 		else {
 			// calculate prpossedgeobability for each node (parameter/weight/pheromone based)
-			for (int i = 0; i < adj.size(); i++) {
-				possedge = graph.getEdge(getPosition(), adj.get(i));
+			for (int i = 0; i < unvis.size(); i++) {
+				possedge = graph.getEdge(getPosition(), unvis.get(i));
 				prob.add((alpha + possedge.getPheromone())
 						/ (beta + possedge.getWeight()));
 				sum += prob.get(i); // increment sum for later calculation
 			}
 			// divide each member by sum for correct probability
-			for (int i = 0; i <= adj.size(); i++) {
+			for (int i = 0; i <= unvis.size(); i++) {
 				cumulativeProbability += prob.get(i) / sum;
 				if (p <= cumulativeProbability) {
-					nextedge = graph.getEdge(getPosition(), adj.get(i));
+					nextedge = graph.getEdge(getPosition(), unvis.get(i));
 					break;
 				}
 			}

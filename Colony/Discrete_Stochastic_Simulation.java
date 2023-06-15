@@ -145,14 +145,22 @@ public class Discrete_Stochastic_Simulation {
                 System.out.println("\tTop candidate cycles:");
                 PriorityQueue<Hamiltonian_Candidates> tmp_Queue = new PriorityQueue<Hamiltonian_Candidates>(
                         nodes_Queue);
+                int i=0;
                 while (!tmp_Queue.isEmpty()) {
+                    
+                    if (i==5){
+                        break;
+                    }
                     Hamiltonian_Candidates obj = tmp_Queue.poll();
-                    System.out.println("{" + obj.getNodes() + "}" + ":" + obj.getWeight());
+                    if (tmp_Queue.peek()==null || !obj.getNodes().equals( tmp_Queue.peek().getNodes())){
+                        System.out.println("\t\t{" + obj.getNodes() + "}" + ":" + obj.getWeight());
+                        i+=1;
+                    }
                 }
-                System.out.println("\tBest Hamiltonian cycle:\n\n");
+                System.out.println("\tBest Hamiltonian cycle:");
                 if (!nodes_Queue.isEmpty()) {
                     Hamiltonian_Candidates obj = nodes_Queue.peek();
-                    System.out.println("{" + obj.getNodes() + "}" + ":" + obj.getWeight());
+                    System.out.println("\t\t{" + obj.getNodes() + "}" + ":" + obj.getWeight());
                 }
 
             }
