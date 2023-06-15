@@ -42,7 +42,6 @@ class AntMoveEvent extends Events {
                     Parameters.get("eta"));
             if(!top_Candidates.contains(nodes)){
                 nodes_Queue.add(new Hamiltonian_Candidates(weight_circle, nodes));
-            }else{
                 top_Candidates.add(nodes);
             }
         }
