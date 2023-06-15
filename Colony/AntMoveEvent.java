@@ -46,7 +46,7 @@ class AntMoveEvent extends Events {
                 .filter(s -> s.length() >= 2)
                 .map(s -> String.valueOf(s.charAt(1)))
                 .forEach(aux::add);
-                nodes_Queue.add(new Hamiltonian_Candidates(weight_circle, aux));
+                nodes_Queue.add(new Hamiltonian_Candidates(weight_circle,  new ArrayList<>(aux.subList(0, aux.size()-1))));
                 top_Candidates.add(nodes);
             }
         }
