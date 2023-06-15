@@ -1,6 +1,9 @@
 package Colony;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.PriorityQueue;
+import java.util.Random;
 
 // import java.io.*;
 class AntMoveEvent extends Events {
@@ -24,7 +27,7 @@ class AntMoveEvent extends Events {
     }
 
     public void get(PriorityQueue<Events> events, double currentTime,
-            HashMap<String, Float> Parameters, PriorityQueue<Hamiltonian_Candidates> nodes_Queue) {
+            HashMap<String, Float> Parameters, PriorityQueue<Hamiltonian_Candidates> nodes_Queue,ArrayList<ArrayList<String>> top_Candidates) {
 
         float weight_circle = 0;
         ant.Move(Edge);
@@ -37,7 +40,11 @@ class AntMoveEvent extends Events {
             }
             ant.releasePheromones(graph, (Parameters.get("gamma") * W) / weight_circle, events, currentTime,
                     Parameters.get("eta"));
-            nodes_Queue.add(new Hamiltonian_Candidates(weight_circle, nodes));
+            if(!top_Candidates.contains(nodes)){
+                nodes_Queue.add(new Hamiltonian_Candidates(weight_circle, nodes));
+            }else{
+                top_Candidates.add(nodes);
+            }
         }
         
         events.add(new AntMoveEvent(graph, ant, currentTime, Parameters.get("alpha"), Parameters.get("beta"),

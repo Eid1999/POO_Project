@@ -1,13 +1,17 @@
 package Colony;
 
-import java.util.*;
-import java.io.*;
-import java.lang.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public class Discrete_Stochastic_Simulation {
     protected HashMap<String, Float> Parameters = new HashMap<String, Float>();
     private String[] Parameters_Name = { "n", "a", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" };
-    private ArrayList<ArrayList<String>> top_Candidates;// Parameters
+    private ArrayList<ArrayList<String>> top_Candidates=new ArrayList<ArrayList<String>> () ;// Parameters
     PriorityQueue<Hamiltonian_Candidates> nodes_Queue = new PriorityQueue<Hamiltonian_Candidates>();
     protected WeightedGraph graph;
     protected Colony colony;
@@ -121,7 +125,7 @@ public class Discrete_Stochastic_Simulation {
                 currentTime = Event.getTime();
                 if (Event instanceof AntMoveEvent) {
                     AntMoveEvent event = (AntMoveEvent) Event;
-                    event.get(events, currentTime, Parameters, nodes_Queue);
+                    event.get(events, currentTime, Parameters, nodes_Queue,top_Candidates);
                     // ant.move();
                     num_moves += 1;
 
@@ -146,7 +150,6 @@ public class Discrete_Stochastic_Simulation {
                 PriorityQueue<Hamiltonian_Candidates> tmp_Queue = new PriorityQueue<Hamiltonian_Candidates>(
                         nodes_Queue);
                 int i=0;
-                Hamiltonian_Candidates obj1=null;
                 while (!tmp_Queue.isEmpty()) {
                     
                     if (i==5){
@@ -156,7 +159,6 @@ public class Discrete_Stochastic_Simulation {
                     if (tmp_Queue.peek()==null || (!obj.getNodes().equals(tmp_Queue.peek().getNodes()))){
                         System.out.println("\t\t{" + obj.getNodes() + "}" + ":" + obj.getWeight());
                         i+=1;
-                        obj1=obj;
                         
                     }
                 }
