@@ -41,10 +41,10 @@ class AntMoveEvent extends Events {
             ant.releasePheromones(graph, (Parameters.get("gamma") * W) / weight_circle, events, currentTime,
                     Parameters.get("eta"));
             if(!top_Candidates.contains(nodes)){
-                ArrayList<String> aux = new ArrayList<>();
+                ArrayList<String> aux = new ArrayList<String>();
                 nodes.stream()
-                .filter(s -> s.length() >= 2)
-                .map(s -> String.valueOf(s.charAt(1)))
+                .filter(str -> str.length() >= 2)
+                .map(str -> String.valueOf(str.substring(1, str.length())))
                 .forEach(aux::add);
                 nodes_Queue.add(new Hamiltonian_Candidates(weight_circle,  new ArrayList<>(aux.subList(0, aux.size()-1))));
                 top_Candidates.add(nodes);
