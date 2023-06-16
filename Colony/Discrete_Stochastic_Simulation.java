@@ -83,9 +83,6 @@ public class Discrete_Stochastic_Simulation {
             System.out.println("Invalid arguments given\nExiting Program");
             System.exit(0);
         }
-
-        // graph.createGraphWithHamiltonianCircuit();
-        // graph.printGraph();
         
         colony = new Colony(Math.round(Parameters.get("nu")), Integer.toString(Math.round(Parameters.get("n1"))));
         Print_Parameters_Graph();
@@ -106,15 +103,10 @@ public class Discrete_Stochastic_Simulation {
 
             this.Parameters.put(this.Parameters_Name[i], aux);
         }
-        // this.colony=new ColonyI(this.Parameters,this.Map);
-        // this.graph=new GraphI(this.Parameters, this.Map);
-
     }
 
     public void Simulation() {
         double currentTime = 0;
-        // PriorityQueue<> Pheno = new PriorityQueue<>();
-        // for (AntI ant : colony.getAnts()) {
         for (Ant ant : colony.getAnts()) {
 
             events.add(new AntMoveEvent(graph, ant, currentTime,

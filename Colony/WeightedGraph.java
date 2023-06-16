@@ -19,10 +19,6 @@ public class WeightedGraph implements Graph<String, Edge> {
         return adjacencyMap;
     }
 
-    public String getNestNode() {
-        return nestNode;
-    }
-
     public void setNestNode(String nestNode) {
         this.nestNode = nestNode;
     }
@@ -45,10 +41,6 @@ public class WeightedGraph implements Graph<String, Edge> {
         List<Edge> destinationEdges = adjacencyMap.getOrDefault(destination, new ArrayList<>());
         destinationEdges.add(new Edge(destination, source, weight));
         adjacencyMap.put(destination, destinationEdges);
-    }
-
-    public boolean hasVertex(String vertex) {
-        return adjacencyMap.containsKey(vertex);
     }
 
     public boolean hasEdge(String source, String destination) {
@@ -108,18 +100,6 @@ public class WeightedGraph implements Graph<String, Edge> {
         return weightSum / 2;
     }
 
-    public List<Edge> getEdgesWithPheromones() {
-        List<Edge> allEdges = new ArrayList<>();
-        for (List<Edge> edges : adjacencyMap.values()) {
-            for (Edge edge : edges) {
-                if (edge.getPheromone() != 0) {
-                    allEdges.add(edge);
-                }
-            }
-        }
-        return allEdges;
-    }
-
     public void updatePheromones(String a, String b, double pheromone) {
 
         getEdge(a, b).setPheromone(pheromone);
@@ -163,7 +143,6 @@ public class WeightedGraph implements Graph<String, Edge> {
         for (int i = 0; i < numVertices; i++) {
 
             startVertex = vertices.get(i);
-            System.out.println(startVertex);
             endVertex = vertices.get((i + 1) % numVertices);
             this.addEdge(startVertex, endVertex, getRandomWeight(maxWeight));
         }
@@ -186,21 +165,6 @@ public class WeightedGraph implements Graph<String, Edge> {
         Random random = new Random();
         return Math.round(random.nextDouble() * maxWeight * 10) / 10.0; // Random weight between 0 and maxWeight with 2
         // decimal places
-    }
-
-    public void printGraph() {
-        System.out.println("Nodes:");
-        for (String vertex : this.getVertices()) {
-            System.out.println(vertex);
-        }
-
-        System.out.println("Edges:");
-        for (Edge edge : this.getEdges()) {
-            String sourceVertex = edge.getSource();
-            String targetVertex = edge.getDestination();
-            double weight = edge.getWeight();
-            System.out.println(sourceVertex + " -> " + targetVertex + " (Weight: " + weight + ")");
-        }
     }
 
     public void printAdjMatrix() {
