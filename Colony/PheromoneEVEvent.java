@@ -3,7 +3,7 @@ import java.util.PriorityQueue;
 
 class PheromoneEVEvent extends Events  {
     private Edge edge;
-    WeightedGraph graph;
+    private WeightedGraph graph;
 
 
     public PheromoneEVEvent(Edge edge, double  currentTime, float eta,WeightedGraph graph) {

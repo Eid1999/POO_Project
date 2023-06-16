@@ -10,15 +10,15 @@ import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
 public class Discrete_Stochastic_Simulation {
-    protected HashMap<String, Float> Parameters = new HashMap<String, Float>();
+    private HashMap<String, Float> Parameters = new HashMap<String, Float>();
     private String[] Parameters_Name = { "n", "a", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" };
     private String[] Parameters_Name_file = { "n", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" };
     private String[] parameters_Description = { "number of nodes in the graph", "the nest node", "alpha, ant move event", "beta, ant move event", "delta, ant move event", "eta, pheromone evaporation event", "rho, pheromone evaporation event", "pheromone level", "ant colony size", "final instant" };
     private ArrayList<ArrayList<String>> top_Candidates=new ArrayList<ArrayList<String>> () ;// Parameters
-    PriorityQueue<Hamiltonian_Candidates> nodes_Queue = new PriorityQueue<Hamiltonian_Candidates>();
-    protected WeightedGraph graph;
-    protected Colony colony;
-    PriorityQueue<Events> events = new PriorityQueue<>();
+    private PriorityQueue<Hamiltonian_Candidates> nodes_Queue = new PriorityQueue<Hamiltonian_Candidates>();
+    private WeightedGraph graph;
+    private Colony colony;
+    private PriorityQueue<Events> events = new PriorityQueue<>();
 
     public Discrete_Stochastic_Simulation(String[] args) {
         if (args.length < 1) {

@@ -3,16 +3,13 @@ package Colony;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.Random;
 
 class AntMoveEvent extends Events {
     private Ant ant;
-    Random rand = new Random();
     private Edge Edge;
-    WeightedGraph graph;
-    double W;
-    protected ArrayList<Edge> array_edge = new ArrayList<Edge>();
-    protected ArrayList<String> nodes = new ArrayList<String>();
+    private WeightedGraph graph;
+    private double W;
+    private ArrayList<String> nodes = new ArrayList<String>();
 
     public AntMoveEvent(WeightedGraph graph, Ant ant, double currentTime, float alpha, float beta, float delta) {
         this.W = graph.getAllWeightsSum();
@@ -30,7 +27,7 @@ class AntMoveEvent extends Events {
         ant.Move(Edge);
         nodes = new ArrayList<String>(ant.getPath());
         
-        array_edge = graph.checkHamilton(ant.getPath());
+        ArrayList<Edge> array_edge = graph.checkHamilton(ant.getPath());
         if (!array_edge.isEmpty()) {
             for (Edge edge : array_edge) {
                 weight_circle += edge.getWeight();
