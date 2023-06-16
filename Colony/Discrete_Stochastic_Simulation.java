@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 public class Discrete_Stochastic_Simulation {
     protected HashMap<String, Float> Parameters = new HashMap<String, Float>();
     private String[] Parameters_Name = { "n", "a", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" };
+    private String[] Parameters_Name_file = { "n", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" };
+    private String[] parameters_Description = { "number of nodes in the graph", "the nest node", "alpha, ant move event", "beta, ant move event", "delta, ant move event", "eta, pheromone evaporation event", "rho, pheromone evaporation event", "pheromone level", "ant colony size", "final instant" };
     private ArrayList<ArrayList<String>> top_Candidates=new ArrayList<ArrayList<String>> () ;// Parameters
     PriorityQueue<Hamiltonian_Candidates> nodes_Queue = new PriorityQueue<Hamiltonian_Candidates>();
     protected WeightedGraph graph;
@@ -62,6 +64,7 @@ public class Discrete_Stochastic_Simulation {
                     i += 1;
                 }
                 br.close();
+                
             } catch (IOException e) {
                 System.out.println("Error Reading File\nExiting Program");
                 System.exit(0);
@@ -75,6 +78,7 @@ public class Discrete_Stochastic_Simulation {
             this.graph.createGraphWithHamiltonianCircuit();
             this.graph.setNestNode("v" + Math.round(this.Parameters.get("n1")));
 
+
         } else {
             System.out.println("Invalid arguments given\nExiting Program");
             System.exit(0);
@@ -82,9 +86,9 @@ public class Discrete_Stochastic_Simulation {
 
         // graph.createGraphWithHamiltonianCircuit();
         // graph.printGraph();
-        Print_Parameters_Graph();
+        
         colony = new Colony(Math.round(Parameters.get("nu")), Integer.toString(Math.round(Parameters.get("n1"))));
-
+        Print_Parameters_Graph();
     }
 
     public void Read_parameters(String[] arg) {
@@ -185,8 +189,8 @@ public class Discrete_Stochastic_Simulation {
 
     public void Print_Parameters_Graph() {
         System.out.println("\nInput Parameters:");
-        for (String key : Parameters_Name) {
-            System.out.println("\t" + key + ":" + Parameters.get(key));
+        for (int i=0; i<Parameters_Name_file.length;i++) {
+            System.out.println("\t" + Parameters.get(Parameters_Name_file[i]) + "  :  " +parameters_Description[i]);
         }
         System.out.println("\nWith Graph:\n");
         graph.printAdjMatrix();
