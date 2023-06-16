@@ -51,7 +51,7 @@ public class Discrete_Stochastic_Simulation {
                             System.out.println("Wrong Numbers Nodes\nExiting Program");
                             System.exit(0);
                         }
-                        // Converte Line String in Intergers
+                        // Convert Line String in Integers
                         for (int j = 0; j < line.length; j++) {
                             double weight = Double.parseDouble(line[j]);
                             if (weight != 0) {
@@ -71,7 +71,6 @@ public class Discrete_Stochastic_Simulation {
             }
 
         } else if (args[0].equals("-r")) {
-            System.out.println("Saving Parameters");
             Read_parameters(Arrays.copyOfRange(args, 1, args.length));
             this.graph = new WeightedGraph(Math.round(this.Parameters.get("n")), Math.round(this.Parameters.get("a")),
                     "v" + args[3]);
