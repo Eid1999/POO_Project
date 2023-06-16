@@ -188,11 +188,11 @@ public class Discrete_Stochastic_Simulation {
     }
 
     public void Print_Parameters_Graph() {
-        System.out.println("\nInput Parameters:");
+        System.out.println("\nInput parameters:");
         for (int i=0; i<Parameters_Name_file.length;i++) {
             System.out.println("\t" + Parameters.get(Parameters_Name_file[i]) + "\t:  " +parameters_Description[i]);
         }
-        System.out.println("\nWith Graph:\n");
+        System.out.println("\nwith graph:");
         graph.printAdjMatrix();
 
     }
