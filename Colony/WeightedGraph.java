@@ -7,12 +7,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+
+/**
+ * Represents a weighted graph.
+ *
+ * @param <String> the type of vertices in the graph
+ * @param <Edge> the type of edges in the graph
+ */
 public class WeightedGraph implements Graph<String, Edge> {
     private Map<String, List<Edge>> adjacencyMap;
     private int numVertices;
     private double maxWeight;
     private String nestNode;
 
+    /**
+     * Constructs a weighted graph with the given number of vertices, maximum weight, and nest node.
+     *
+     * @param numVertices the number of vertices in the graph
+     * @param maxWeight   the maximum weight of edges in the graph
+     * @param nestNode    the nest node of the graph
+     */
     public WeightedGraph(int numVertices, double maxWeight, String n1) {
         adjacencyMap = new HashMap<>();
         this.nestNode = n1;
@@ -20,24 +34,53 @@ public class WeightedGraph implements Graph<String, Edge> {
         this.maxWeight = maxWeight;
     }
 
+    /**
+     * Returns the adjacency map of the graph.
+     *
+     * @return the adjacency map of the graph
+     */
     public Map<String, List<Edge>> getAdjancyMap() {
         return adjacencyMap;
     }
 
+    /**
+     * Sets the nest node of the graph.
+     *
+     * @param nestNode the nest node to set
+     */
     public void setNestNode(String nestNode) {
         this.nestNode = nestNode;
     }
 
+    /**
+     * Adds a vertex to the graph.
+     *
+     * @param vertex the vertex to add
+     */
     public void addVertex(String vertex) {
         adjacencyMap.put(vertex, new ArrayList<>());
     }
 
+    /**
+     * Adds a directed edge to the graph between the given source and destination vertices with the specified weight.
+     *
+     * @param source      the source vertex
+     * @param destination the destination vertex
+     * @param weight      the weight of the edge
+     */
     public void add1Edge(String source, String destination, double weight) {
         List<Edge> sourceEdges = adjacencyMap.getOrDefault(source, new ArrayList<>());
         sourceEdges.add(new Edge(source, destination, weight));
         adjacencyMap.put(source, sourceEdges);
     }
 
+    /**
+     * Adds an undirected edge to the graph between the given vertices with the specified weight.
+     *
+     * @param vertex1 the first vertex of the edge
+     * @param vertex2 the second vertex of the edge
+     * @param weight  the weight of the edge
+     */
     public void addEdge(String source, String destination, double weight) {
         List<Edge> sourceEdges = adjacencyMap.getOrDefault(source, new ArrayList<>());
         sourceEdges.add(new Edge(source, destination, weight));
@@ -48,6 +91,13 @@ public class WeightedGraph implements Graph<String, Edge> {
         adjacencyMap.put(destination, destinationEdges);
     }
 
+    /**
+     * Checks if an edge exists between the given source and destination vertices.
+     *
+     * @param source      the source vertex
+     * @param destination the destination vertex
+     * @return true if an edge exists, false otherwise
+     */
     public boolean hasEdge(String source, String destination) {
         List<Edge> edges = adjacencyMap.get(source);
         if (edges != null) {
@@ -60,6 +110,13 @@ public class WeightedGraph implements Graph<String, Edge> {
         return false;
     }
 
+     /**
+     * Returns the edge between the given source and destination vertices.
+     *
+     * @param source      the source vertex
+     * @param destination the destination vertex
+     * @return the edge between the vertices, or null if no such edge exists
+     */
     public Edge getEdge(String source, String destination) {
         List<Edge> edges = adjacencyMap.get(source);
         if (edges != null) {
@@ -72,10 +129,21 @@ public class WeightedGraph implements Graph<String, Edge> {
         return null;
     }
 
+    /**
+     * Returns a list of all vertices in the graph.
+     *
+     * @return a list of vertices
+     */
     public List<String> getVertices() {
         return new ArrayList<>(adjacencyMap.keySet());
     }
     
+    /**
+     * Returns a list of neighboring vertices of the given vertex.
+     *
+     * @param vertex the vertex to get neighbors of
+     * @return a list of neighboring vertices
+     */
     public List<String> getNeighbors(String vertex) {
         List<Edge> edges = adjacencyMap.get(vertex);
         List<String> neighbors = new ArrayList<>();
@@ -87,6 +155,11 @@ public class WeightedGraph implements Graph<String, Edge> {
         return neighbors;
     }
 
+    /**
+     * Returns a list of all edges in the graph.
+     *
+     * @return a list of edges
+     */
     public List<Edge> getEdges() {
         List<Edge> allEdges = new ArrayList<>();
         for (List<Edge> edges : adjacencyMap.values()) {
@@ -95,6 +168,11 @@ public class WeightedGraph implements Graph<String, Edge> {
         return allEdges;
     }
 
+    /**
+     * Returns the sum of weights of all edges in the graph.
+     *
+     * @return the sum of weights of all edges
+     */
     public double getAllWeightsSum() {
         double weightSum = 0;
         for (List<Edge> edges : adjacencyMap.values()) {
@@ -105,13 +183,25 @@ public class WeightedGraph implements Graph<String, Edge> {
         return weightSum / 2;
     }
 
+    /**
+     * Updates the pheromone level of the edge between the given vertices.
+     *
+     * @param a         the source vertex
+     * @param b         the destination vertex
+     * @param pheromone the new pheromone level
+     */
     public void updatePheromones(String a, String b, double pheromone) {
 
         getEdge(a, b).setPheromone(pheromone);
         getEdge(b, a).setPheromone(pheromone);
     }
 
-    // converts path (nodes as strings) into a list of <directed> edges
+    /**
+     * Converts a path represented by a list of nodes into a list of directed edges.
+     *
+     * @param visited the list of visited nodes representing a path
+     * @return a list of directed edges representing the path
+     */
     public ArrayList<Edge> getPathAsEdges(ArrayList<String> vis) {
         ArrayList<Edge> edgelist = new ArrayList<Edge>();
         for (int i = 1; i < vis.size(); i++) {
@@ -120,7 +210,12 @@ public class WeightedGraph implements Graph<String, Edge> {
         return edgelist;
     }
 
-    // checks for completed Hamiltonian Cycle
+    /**
+     * Checks if the visited nodes form a completed Hamiltonian cycle and returns the cycle as a list of edges.
+     *
+     * @param visited the list of visited nodes
+     * @return a list of edges representing the Hamiltonian cycle, or an empty list if no cycle is found
+     */
     public ArrayList<Edge> checkHamilton(ArrayList<String> visited) {
         int sz = visited.size();
         ArrayList<Edge> hamilton = new ArrayList<Edge>();
@@ -130,6 +225,11 @@ public class WeightedGraph implements Graph<String, Edge> {
         return hamilton;
     }
 
+    /**
+     * Creates a graph with a Hamiltonian circuit by randomly connecting the vertices.
+     *
+     * @return the graph with a Hamiltonian circuit
+     */
     public Graph<String,Edge> createGraphWithHamiltonianCircuit() {
         Random random = new Random();
         String startVertex, endVertex;
@@ -166,12 +266,21 @@ public class WeightedGraph implements Graph<String, Edge> {
         return this;
     }
 
+    /**
+     * Generates a random weight between 0 and the maximum weight.
+     *
+     * @param maxWeight the maximum weight
+     * @return a random weight
+     */
     private static double getRandomWeight(double maxWeight) {
         Random random = new Random();
         return Math.round(random.nextDouble() * maxWeight * 10) / 10.0; // Random weight between 0 and maxWeight with 2
         // decimal places
     }
 
+    /**
+     * Prints the adjacency matrix of the graph.
+     */
     public void printAdjMatrix() {
         List<String> vertices = new ArrayList<>();
         for (int i = 1; i <= numVertices; i++) {
@@ -209,4 +318,3 @@ public class WeightedGraph implements Graph<String, Edge> {
         }
     }
 }
-
