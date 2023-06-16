@@ -3,7 +3,9 @@ package Colony;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Graph Interface 
+ */
 public interface Graph<V, E> {
     /**
      * Sets the nest node in the graph.

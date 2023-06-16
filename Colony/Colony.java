@@ -6,8 +6,14 @@ import java.util.ArrayList;
  * Represents a colony of ants.
  */
 public class Colony implements ColonyI {
-
+    /**
+     * Nest node of the colony
+     */
     protected String nest;
+
+    /**
+     * The list of ants in the colony.
+     */
     protected ArrayList<AntI> ants = new ArrayList<AntI>();
 
     /**

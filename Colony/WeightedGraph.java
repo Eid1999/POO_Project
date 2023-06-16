@@ -10,9 +10,6 @@ import java.util.Random;
 
 /**
  * Represents a weighted graph.
- *
- * @param <String> the type of vertices in the graph
- * @param <Edge> the type of edges in the graph
  */
 public class WeightedGraph implements Graph<String, Edge> {
     private Map<String, List<Edge>> adjacencyMap;
@@ -25,7 +22,7 @@ public class WeightedGraph implements Graph<String, Edge> {
      *
      * @param numVertices the number of vertices in the graph
      * @param maxWeight   the maximum weight of edges in the graph
-     * @param nestNode    the nest node of the graph
+     * @param n1    the nest node of the graph
      */
     public WeightedGraph(int numVertices, double maxWeight, String n1) {
         adjacencyMap = new HashMap<>();
@@ -77,8 +74,8 @@ public class WeightedGraph implements Graph<String, Edge> {
     /**
      * Adds an undirected edge to the graph between the given vertices with the specified weight.
      *
-     * @param vertex1 the first vertex of the edge
-     * @param vertex2 the second vertex of the edge
+     * @param source the first vertex of the edge
+     * @param destination the second vertex of the edge
      * @param weight  the weight of the edge
      */
     public void addEdge(String source, String destination, double weight) {
@@ -199,7 +196,7 @@ public class WeightedGraph implements Graph<String, Edge> {
     /**
      * Converts a path represented by a list of nodes into a list of directed edges.
      *
-     * @param visited the list of visited nodes representing a path
+     * @param vis,  visited the list of visited nodes representing a path
      * @return a list of directed edges representing the path
      */
     public ArrayList<Edge> getPathAsEdges(ArrayList<String> vis) {

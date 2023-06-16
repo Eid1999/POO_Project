@@ -6,7 +6,16 @@ import java.util.ArrayList;
  * Represents a Hamiltonian candidate, which includes a weight and a list of nodes.
  */
 public class Hamiltonian_Candidates implements Comparable<Hamiltonian_Candidates> {
+
+    /**
+     * Hamilton Cicle weight
+     */
+    
     protected float weight;
+
+    /**
+     * Hamilton Cicle path
+     */
     protected ArrayList<String> nodes;
 
     /**
