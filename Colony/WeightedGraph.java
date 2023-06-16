@@ -1,6 +1,11 @@
 package Colony;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class WeightedGraph implements Graph<String, Edge> {
     private Map<String, List<Edge>> adjacencyMap;
@@ -125,7 +130,7 @@ public class WeightedGraph implements Graph<String, Edge> {
         return hamilton;
     }
 
-    public WeightedGraph createGraphWithHamiltonianCircuit() {
+    public Graph<String,Edge> createGraphWithHamiltonianCircuit() {
         Random random = new Random();
         String startVertex, endVertex;
 

@@ -16,8 +16,8 @@ public class Discrete_Stochastic_Simulation {
     private String[] parameters_Description = { "number of nodes in the graph", "the nest node", "alpha, ant move event", "beta, ant move event", "delta, ant move event", "eta, pheromone evaporation event", "rho, pheromone evaporation event", "pheromone level", "ant colony size", "final instant" };
     private ArrayList<ArrayList<String>> top_Candidates=new ArrayList<ArrayList<String>> () ;// Parameters
     private PriorityQueue<Hamiltonian_Candidates> nodes_Queue = new PriorityQueue<Hamiltonian_Candidates>();
-    private WeightedGraph graph;
-    private Colony colony;
+    private Graph<String,Edge> graph;
+    private ColonyI colony;
     private PriorityQueue<Events> events = new PriorityQueue<>();
 
     public Discrete_Stochastic_Simulation(String[] args) {
@@ -106,7 +106,7 @@ public class Discrete_Stochastic_Simulation {
 
     public void Simulation() {
         double currentTime = 0;
-        for (Ant ant : colony.getAnts()) {
+        for (AntI ant : colony.getAnts()) {
 
             events.add(new AntMoveEvent(graph, ant, currentTime,
                     Parameters.get("alpha"), Parameters.get("beta"), Parameters.get("delta")));

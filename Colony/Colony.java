@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Colony implements ColonyI {
 
 	protected String nest;
-	protected ArrayList<Ant> ant = new ArrayList<Ant>();
+	protected ArrayList<AntI> ant = new ArrayList<AntI>();
 	
 	// constructor
 	Colony(int size, String nestnode) {
@@ -32,7 +32,7 @@ public class Colony implements ColonyI {
 		return nest;
 	}
 	
-	public ArrayList<Ant> getAnts() {
+	public ArrayList<AntI> getAnts() {
 		return ant;
 	}
 }

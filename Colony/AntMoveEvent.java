@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 
 class AntMoveEvent extends Events {
-    private Ant ant;
+    private AntI ant;
     private Edge Edge;
-    private WeightedGraph graph;
+    private Graph<String,Edge> graph;
     private double W;
     private ArrayList<String> nodes = new ArrayList<String>();
 
-    public AntMoveEvent(WeightedGraph graph, Ant ant, double currentTime, float alpha, float beta, float delta) {
+    public AntMoveEvent(Graph<String,Edge> graph, AntI ant, double currentTime, float alpha, float beta, float delta) {
         this.W = graph.getAllWeightsSum();
         this.ant = ant;
         this.graph = graph;

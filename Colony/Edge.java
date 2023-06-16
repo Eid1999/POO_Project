@@ -1,6 +1,6 @@
 package Colony;
 
-public class Edge implements EdgeInterface<String> {
+public class Edge{
     private String source;
     private String destination;
     private double weight;

@@ -40,7 +40,7 @@ public class Ant implements AntI {
 	// releases pheromones in every edge of the path upon completing the cycle
 	// and also resets the ant's path in order to start a new search.
 	// also returns the completed cycle as a <directed> edge list
-	public void releasePheromones(WeightedGraph graph, double phero, PriorityQueue<Events> events, double currentTime,
+	public void releasePheromones(Graph<String,Edge> graph, double phero, PriorityQueue<Events> events, double currentTime,
 			float eta) {
 		String aux = getPosition();
 		for (int i = 1; i < path.size()-1; i++) {
@@ -69,7 +69,7 @@ public class Ant implements AntI {
 		}
 
 	// picks next edge to move to
-	public Edge Optimization(WeightedGraph graph, float alpha, float beta, float delta) {
+	public Edge Optimization(Graph<String,Edge> graph, float alpha, float beta, float delta) {
 		double p = Math.random(); // random roll (double between 0 and 1)
 		double sum = 0.00; // used as the sum of all probabilities
 		double cumulativeProbability = 0.00; // used for the random roll

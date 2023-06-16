@@ -19,6 +19,7 @@ public interface Graph<V, E> {
     public void updatePheromones(String a, String b, double pheromone);
     public ArrayList<E> getPathAsEdges(ArrayList<String> vis);
     public ArrayList<E> checkHamilton(ArrayList<String> visited);
+    public Graph<String,Edge> createGraphWithHamiltonianCircuit();
 
 }
 

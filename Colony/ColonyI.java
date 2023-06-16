@@ -1,8 +1,8 @@
 package Colony;
-import java.util.*;
+import java.util.ArrayList;
 
 public interface ColonyI {
 	public int getSize();
 	public String getNest();
-	public ArrayList<Ant> getAnts();
+	public ArrayList<AntI> getAnts();
 }
