@@ -105,7 +105,7 @@ public class Ant implements AntI {
 		}
 		// case where there's unvisited adjacent nodes
 		else {
-			// calculate prpossedgeobability for each node (parameter/weight/pheromone based)
+			// calculate edge probability for each node (parameter/weight/pheromone based)
 			for (int i = 0; i < unvis.size(); i++) {
 				possedge = graph.getEdge(getPosition(), unvis.get(i));
 				prob.add((alpha + possedge.getPheromone())

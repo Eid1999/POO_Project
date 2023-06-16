@@ -5,10 +5,8 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-// import java.io.*;
 class AntMoveEvent extends Events {
     private Ant ant;
-    // private Edge edge;
     Random rand = new Random();
     private Edge Edge;
     WeightedGraph graph;

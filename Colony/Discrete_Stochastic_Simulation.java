@@ -122,7 +122,6 @@ public class Discrete_Stochastic_Simulation {
                 if (Event instanceof AntMoveEvent) {
                     AntMoveEvent event = (AntMoveEvent) Event;
                     event.get(events, currentTime, Parameters, nodes_Queue,top_Candidates);
-                    // ant.move();
                     num_moves += 1;
 
                 } else {
