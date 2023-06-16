@@ -4,7 +4,6 @@ import java.util.PriorityQueue;
 class PheromoneEVEvent extends Events  {
     private Edge edge;
     WeightedGraph graph;
-    String type="Evaporation";
 
 
     public PheromoneEVEvent(Edge edge, double  currentTime, float eta,WeightedGraph graph) {

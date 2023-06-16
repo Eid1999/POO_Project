@@ -10,7 +10,6 @@ class AntMoveEvent extends Events {
     private Ant ant;
     // private Edge edge;
     Random rand = new Random();
-    String type = "AntMove";
     private Edge Edge;
     WeightedGraph graph;
     double W;
