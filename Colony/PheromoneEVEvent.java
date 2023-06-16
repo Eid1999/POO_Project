@@ -1,5 +1,5 @@
 package Colony;
-import java.util.*;
+import java.util.PriorityQueue;
 
 class PheromoneEVEvent extends Events  {
     private Edge edge;
@@ -17,9 +17,15 @@ class PheromoneEVEvent extends Events  {
         
     }
     public void get(PriorityQueue<Events> events,double currentTime,float eta,float rho) {
-        events.add(new PheromoneEVEvent(edge, currentTime,eta,graph));
-        edge.setPheromone(edge.getPheromone()-rho);
-        graph.getEdge(edge.getDestination(), edge.getSource()).setPheromone(edge.getPheromone()-rho);
+        if (edge.getPheromone()-rho<0){
+            edge.setPheromone(0);
+            graph.getEdge(edge.getDestination(), edge.getSource()).setPheromone(0);
+        }
+        else{
+            events.add(new PheromoneEVEvent(edge, currentTime,eta,graph));
+            edge.setPheromone(edge.getPheromone()-rho);
+            graph.getEdge(edge.getDestination(), edge.getSource()).setPheromone(edge.getPheromone()-rho);
+        }
     }    
 
 }

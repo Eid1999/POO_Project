@@ -1,6 +1,8 @@
 package Colony;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
 
 public class Ant implements AntI {
 	private ArrayList<String> path = new ArrayList<String>();
@@ -41,12 +43,13 @@ public class Ant implements AntI {
 	public void releasePheromones(WeightedGraph graph, double phero, PriorityQueue<Events> events, double currentTime,
 			float eta) {
 		String aux = getPosition();
-		for (int i = 1; i < path.size(); i++) {
-			graph.updatePheromones(path.get(i - 1), path.get(i), phero);
+		for (int i = 1; i < path.size()-1; i++) {
+			
 			Edge edge = graph.getEdge(path.get(i - 1), path.get(i));
-			if (edge.getPheromone() != 0) {
+			if (edge.getPheromone() == 0) {
 				events.add(new PheromoneEVEvent(edge, currentTime, eta, graph));
 			}
+			graph.updatePheromones(path.get(i - 1), path.get(i), phero+edge.getPheromone());
 		}
 		path.clear();
 		path.add(aux);
