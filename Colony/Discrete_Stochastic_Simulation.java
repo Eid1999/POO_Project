@@ -9,17 +9,27 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
+/**
+ * Discrete Stochastic Simulation class.
+ * Simulates a discrete stochastic process using a graph and colony of ants.
+ */
 public class Discrete_Stochastic_Simulation {
     private HashMap<String, Float> Parameters = new HashMap<String, Float>();
     private String[] Parameters_Name = { "n", "a", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" };
     private String[] Parameters_Name_file = { "n", "n1", "alpha", "beta", "delta", "eta", "rho", "gamma", "nu", "tau" };
     private String[] parameters_Description = { "number of nodes in the graph", "the nest node", "alpha, ant move event", "beta, ant move event", "delta, ant move event", "eta, pheromone evaporation event", "rho, pheromone evaporation event", "pheromone level", "ant colony size", "final instant" };
-    private ArrayList<ArrayList<String>> top_Candidates=new ArrayList<ArrayList<String>> () ;// Parameters
+    private ArrayList<ArrayList<String>> top_Candidates=new ArrayList<ArrayList<String>> (); // Parameters
     private PriorityQueue<Hamiltonian_Candidates> nodes_Queue = new PriorityQueue<Hamiltonian_Candidates>();
     private Graph<String,Edge> graph;
     private ColonyI colony;
     private PriorityQueue<Events> events = new PriorityQueue<>();
 
+    /**
+     * Constructor for the Discrete_Stochastic_Simulation class.
+     * Initializes the simulation based on the command-line arguments.
+     *
+     * @param args Command-line arguments passed to the program.
+     */
     public Discrete_Stochastic_Simulation(String[] args) {
         if (args.length < 1) {
             System.out.println("No arguments given\nExiting Program");
@@ -64,7 +74,7 @@ public class Discrete_Stochastic_Simulation {
                     i += 1;
                 }
                 br.close();
-                
+
             } catch (IOException e) {
                 System.out.println("Error Reading File\nExiting Program");
                 System.exit(0);
@@ -82,11 +92,16 @@ public class Discrete_Stochastic_Simulation {
             System.out.println("Invalid arguments given\nExiting Program");
             System.exit(0);
         }
-        
+
         colony = new Colony(Math.round(Parameters.get("nu")), Integer.toString(Math.round(Parameters.get("n1"))));
         Print_Parameters_Graph();
     }
 
+    /**
+     * Reads the parameters from the command-line arguments.
+     *
+     * @param arg Command-line arguments.
+     */
     public void Read_parameters(String[] arg) {
         float aux;
         if (arg.length != this.Parameters_Name.length) {
@@ -104,6 +119,10 @@ public class Discrete_Stochastic_Simulation {
         }
     }
 
+    /**
+     * Runs the simulation.
+     * Simulates the discrete stochastic process until the final instant (tau) is reached.
+     */
     public void Simulation() {
         double currentTime = 0;
         for (AntI ant : colony.getAnts()) {
@@ -150,7 +169,7 @@ public class Discrete_Stochastic_Simulation {
                     best = tmp_Queue.poll();
                 }
                 while (!tmp_Queue.isEmpty()) {
-                    
+
                     if (i==5){
                         break;
                     }
@@ -161,7 +180,7 @@ public class Discrete_Stochastic_Simulation {
                         .collect(Collectors.joining(", "));
                         System.out.println("\t\t{" + elements + "}" + ":" + obj.getWeight());
                         i+=1;
-                        
+
                     }
                 }
                 System.out.println("\tBest Hamiltonian cycle:");
@@ -177,6 +196,10 @@ public class Discrete_Stochastic_Simulation {
         }
     }
 
+    /**
+     * Prints the parameters and graph details.
+     * Displays the input parameters and the adjacency matrix of the graph.
+     */
     public void Print_Parameters_Graph() {
         System.out.println("\nInput parameters:");
         for (int i=0; i<Parameters_Name_file.length;i++) {
