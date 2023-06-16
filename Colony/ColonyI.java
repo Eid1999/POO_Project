@@ -2,5 +2,7 @@ package Colony;
 import java.util.*;
 
 public interface ColonyI {
-   public ArrayList<Ant> getAnts();
+	public int getSize();
+	public String getNest();
+	public ArrayList<Ant> getAnts();
 }
