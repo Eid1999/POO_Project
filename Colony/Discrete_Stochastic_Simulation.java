@@ -35,7 +35,7 @@ public class Discrete_Stochastic_Simulation {
             System.out.println("No arguments given\nExiting Program");
             System.exit(0);
         } else if (args[0].equals("-f")) {
-            System.out.println("Reading File");
+
 
             // Reading File object
             int i = 0;
@@ -52,7 +52,7 @@ public class Discrete_Stochastic_Simulation {
                         line_copy[0] = line[0];
                         line_copy[1] = "0";
                         System.arraycopy(line, 1, line_copy, 2, 9);
-                        System.out.println(line_copy);
+                        //System.out.println(line_copy);
                         this.Read_parameters(line_copy);
                         this.graph = new WeightedGraph(Math.round(this.Parameters.get("n")),
                                 0, "v" + line_copy[2]);
